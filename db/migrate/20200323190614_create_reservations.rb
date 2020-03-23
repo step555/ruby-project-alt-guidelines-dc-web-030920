@@ -5,7 +5,8 @@ class CreateReservations < ActiveRecord::Migration[5.2]
       t.integer :car_id
       t.datetime :pickup_date
       t.datetime :dropoff_date
-      t.integer :trip_duration
+      t.integer :trip_duration 
+      #add boolean stating whether or not payment has been made
     end
   end
 end
