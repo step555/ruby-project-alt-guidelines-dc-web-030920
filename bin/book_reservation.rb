@@ -45,20 +45,23 @@ end
 
 def make_reservation(user)
     # user = User.find_by(username: user_name)
-    input_u = user.id
-    input_c = gets_car
-    input_pd = gets_pd
-    input_dd = gets_dd
-    trip_d = (input_dd.to_datetime - input_pd.to_datetime).to_f.ceil
-    user_confirmation = confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
-    # add functionality to allow customer to put "y"
-        if user_confirmation == "Y" 
-            create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
-            #lets change this to display reservation that was just created and 
-            #then ask if they would like to review all reservations or return to the main menu? 
-            display_reservations(user)
-        elsif user_confirmation == "N"
-            main_menu(user)
-        end
+    if user.age < 25
+       puts "We're sorry, you're too young to rent a car!"
+    else
+        input_u = user.id
+        input_c = gets_car
+        input_pd = gets_pd
+        input_dd = gets_dd
+        trip_d = (input_dd.to_datetime - input_pd.to_datetime).to_f.ceil
+        user_confirmation = confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
+        # add functionality to allow customer to put "y"
+            if user_confirmation == "Y" 
+                create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
+                #lets change this to display reservation that was just created and 
+                #then ask if they would like to review all reservations or return to the main menu? 
+                display_reservations(user)
+            end
+    end
+    return_main_menu(user)
 end
     #message invalid entry + return to whatever it returns to 

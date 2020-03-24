@@ -22,7 +22,7 @@ def display_reservations(user)
     # user = User.find_by(username: user_name)
     res = user.reservations
     if res.length == 0 
-       puts "You have no reservations at this time."
+       puts "You don't have any reservations at this time."
     else
         count = 1 
         puts "#{user.username.upcase}'S CONFIRMED RESERVATIONS"
