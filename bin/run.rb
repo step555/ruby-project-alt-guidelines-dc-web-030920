@@ -24,6 +24,11 @@ end
 def run 
     greet 
     user_name = user_input#.downcase
+end
+
+
+
+def main_menu(user_name)
     welcome_user(user_name)
     #selecting number option from menu 
     menu_selection = user_input
@@ -35,4 +40,5 @@ def run
     end
 end
 
-run 
+username = run
+main_menu(username)
