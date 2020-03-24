@@ -3,6 +3,7 @@ require_relative '../bin/book_reservation'
 require_relative '../bin/display_reservations'
 require_relative '../bin/login'
 require_relative '../bin/welcome_menu_goodbye'
+require_relative '../bin/make_payment'
 
 # puts "hello world"
 

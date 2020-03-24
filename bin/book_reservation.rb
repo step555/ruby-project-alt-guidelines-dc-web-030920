@@ -28,11 +28,11 @@ end
     #select car
     #select dates for car #ensure pickup date is earlier than dropoff date
 
-def confirm_reservation(user_name, input_c, input_pd, input_dd, trip_d)
+def confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
     car = Car.find_by(id:input_c)
     total_price = (trip_d*car.price_per_day)
     puts "Please go over your reservation and make changes if necessary"
-    puts "Customer: #{user_name}"
+    puts "Customer: #{user.username}"
     puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
     puts "Pickup Date: #{input_pd}"
     puts "Dropoff Date: #{input_dd}"
@@ -43,8 +43,8 @@ def confirm_reservation(user_name, input_c, input_pd, input_dd, trip_d)
     user_input
 end
 
-def make_reservation(user_name)
-    user = User.find_by(username: user_name)
+def make_reservation(user)
+    # user = User.find_by(username: user_name)
     input_u = user.id
     input_c = gets_car
     input_pd = gets_pd
@@ -56,9 +56,9 @@ def make_reservation(user_name)
             create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
             #lets change this to display reservation that was just created and 
             #then ask if they would like to review all reservations or return to the main menu? 
-            display_reservations(user_name)
+            display_reservations(user)
         elsif user_confirmation == "N"
-            main_menu(user_name)
+            main_menu(user)
         end
 end
     #message invalid entry + return to whatever it returns to 

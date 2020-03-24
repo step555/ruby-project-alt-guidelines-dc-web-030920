@@ -12,25 +12,28 @@ def car_image
   end
   
 
-  def welcome_user(user_name)
-    puts "Welcome #{user_name}. What would you like to do today?"
+  def welcome_user(user)
+    puts "Welcome #{user.username}. What would you like to do today?"
     puts "1. Book a new reservation"
     puts "2. Review Reservations"
-    puts "3. Quit"
+    puts "3. Make Payment"
+    puts "4. Quit"
     #current reservation & reservation history
     # puts "3. Make a payment"
 end
 
-def main_menu(user_name)
-    welcome_user(user_name)
+def main_menu(user)
+    welcome_user(user)
     #selecting number option from menu 
     menu_selection = user_input
     if menu_selection == "1"
         # all the methods to let someone book a car
-        make_reservation(user_name)
+        make_reservation(user)
     elsif menu_selection == "2"
-        display_reservations(user_name)
+        display_reservations(user)
     elsif menu_selection == "3"
+        make_payment(user)
+    elsif menu_selection == "4"
         goodbye
     end
 end

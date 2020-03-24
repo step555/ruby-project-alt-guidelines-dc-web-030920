@@ -1,7 +1,9 @@
-def display_reservations(user_name)
-    user = User.find_by(username: user_name)
+def display_reservations(user)
+    # user = User.find_by(username: user_name)
+    count = 1 
+    puts "#{user.username.upcase}'S CONFIRMED RESERVATIONS"
     user.reservations.each do |r|
-        puts "***************************"
+        puts "~~~~~RESERVATION - #{count}~~~~~"
         car = Car.find_by(id: r.car_id)
         puts "Pickup Date: #{r.pickup_date}"        
         puts "Dropoff date: #{r.dropoff_date}"
@@ -16,11 +18,12 @@ def display_reservations(user_name)
         else
             puts "You owe #{total_price}"
         end
+        count += 1
     end
     puts 'If you would like to return to the main menu enter "Y". If you would like to quit, enter "N"'
     answer = user_input
     if answer == "Y"
-        main_menu(user_name)
+        main_menu(user)
     elsif answer == "N"
         goodbye
     end
