@@ -51,6 +51,9 @@ def make_reservation(user_name)
     # add functionality to allow customer to put "y"
         if user_confirmation == "Y" 
             create_reservation(input_u, input_c, input_pd, input_dd)
+            #lets change this to display reservation that was just created and 
+            #then ask if they would like to review all reservations or return to the main menu? 
+            display_reservations(user_name)
         elsif user_confirmation == "N"
             main_menu(user_name)
         end

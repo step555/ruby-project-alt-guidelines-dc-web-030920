@@ -17,7 +17,7 @@ def display_reservations(user_name)
     if answer == "Y"
         main_menu(user_name)
     elsif answer == "N"
-        puts "Goodbye!"
+        goodbye
     end
 
 end
