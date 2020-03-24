@@ -17,7 +17,6 @@ def display_a_reservation(r, count)
         end
 end
 
-
 def display_reservations(user)
     # user = User.find_by(username: user_name)
     res = user.reservations
