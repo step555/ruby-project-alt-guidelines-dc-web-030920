@@ -30,7 +30,7 @@ end
 
 def confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
     car = Car.find_by(id:input_c)
-    total_price = (trip_d*car.price_per_day)
+    total_price = (trip_d*car.price_per_day).round(2)
     puts "Please go over your reservation and make changes if necessary"
     puts "Customer: #{user.username}"
     puts "Car: #{car.make} #{car.model} #{car.year}...or similar"

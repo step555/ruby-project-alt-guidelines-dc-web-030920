@@ -43,3 +43,13 @@ def goodbye
     car_image
     exit
 end
+
+def return_main_menu(user)
+    puts "Would you like to return to the main menu? 'Y' or 'N'"
+    answer2 = user_input
+    if answer2 = "Y"
+        main_menu(user)
+    else
+        goodbye
+    end
+end
