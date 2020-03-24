@@ -6,15 +6,11 @@ def car_image
   end
 
   def run 
-    greet 
-    user_name = user_input#.downcase
+    puts "Hello! Welcome to the coolest car rental app ever!" 
+    car_image
+    login
   end
   
-  def greet
-      puts "Hello! Welcome to the coolest car rental app ever!"
-      puts "Please enter your username: " 
-      car_image
-  end
 
   def welcome_user(user_name)
     puts "Welcome #{user_name}. What would you like to do today?"
@@ -42,4 +38,5 @@ end
 def goodbye
     puts "Goodbye!"
     car_image
+    exit
 end

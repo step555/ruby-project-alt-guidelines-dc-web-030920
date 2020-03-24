@@ -4,7 +4,7 @@ require_relative '../bin/display_reservations'
 require_relative '../bin/login'
 require_relative '../bin/welcome_menu_goodbye'
 
-puts "hello world"
+# puts "hello world"
 
 
 
@@ -13,10 +13,4 @@ def user_input
 end
 
 
-
-
-
-
-
-user_name = run
-main_menu(user_name)
+run
