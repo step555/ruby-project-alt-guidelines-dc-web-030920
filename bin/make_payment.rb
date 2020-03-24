@@ -1,4 +1,7 @@
 
+
+
+
 def make_payment(user)
     puts "#{user.username.upcase} UNPAID RESERVATIONS"
     unpaid_reservations = user.reservations.select do |r|
@@ -26,5 +29,21 @@ def make_payment(user)
         count += 1
     end
     puts "Would you like to pay your total balance of $#{total}? 'Y' or 'N'"
-
+        answer = user_input
+        if answer == "Y" 
+            unpaid_reservations.each do |r|
+                r.paid = true
+                r.save
+            end
+            puts "Payment confirmed! Thank you for your business!"
+        else 
+            puts  "Please pay us sometime soon!"
+        end
+    puts "Would you like to return to the main menu? 'Y' or 'N'"
+        answer2 = user_input
+        if answer2 = "Y"
+            main_menu(user)
+        else
+            goodbye
+        end
 end
