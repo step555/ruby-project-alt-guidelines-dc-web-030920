@@ -1,12 +1,21 @@
 require_relative '../config/environment'
 require_relative '../bin/book_reservation'
 require_relative '../bin/display_reservations'
+# require_relative '../bin/create_a_user'
 
 puts "hello world"
+
+def car_image
+  puts  "  ______"
+  puts "  /|_||_\`.__"
+  puts '(   _    _ _\"'
+  puts " =`-(_)--(_)-'"
+end
 
 def greet
     puts "Hello! Welcome to the coolest car rental app ever!"
     puts "Please enter your username: " 
+    car_image
 end
 
 def welcome_user(user_name)
@@ -40,5 +49,5 @@ def main_menu(user_name)
     end
 end
 
-username = run
-main_menu(username)
+user_name = run
+main_menu(user_name)

@@ -28,10 +28,11 @@ end
     #select car
     #select dates for car #ensure pickup date is earlier than dropoff date
 
-def confirm_reservation(user, input_c, input_pd, input_dd)
+def confirm_reservation(user_name, input_c, input_pd, input_dd)
     car = Car.find_by(id:input_c)
+    # user = User.find_find(username: user_name)
     puts "Please go over your reservation and make changes if necessary"
-    puts "Customer: #{user.username}"
+    puts "Customer: #{user_name}"
     puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
     puts "Pickup Date: #{input_pd}"
     puts "Dropoff Date: #{input_dd}"
