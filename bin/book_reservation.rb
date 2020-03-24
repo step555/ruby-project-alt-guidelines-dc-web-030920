@@ -5,17 +5,17 @@ def gets_car
     Car.all.each do |c|
         puts "#{c.id}. #{c.make} #{c.model} #{c.year} $#{c.price_per_day} per day."
     end
-    user_input
+    not_yes_or_no
 end
 
 def gets_pd
     puts "Select your pickup date using a YYYY-MM-DD HH:MM:SS"
-    user_input
+    not_yes_or_no
 end
 
 def gets_dd
     puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    user_input
+    not_yes_or_no
 end
 
 
@@ -24,7 +24,7 @@ def create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
     res
 end
 
-#once username obtained
+    #once username obtained
     #select car
     #select dates for car #ensure pickup date is earlier than dropoff date
 
@@ -52,6 +52,7 @@ def make_reservation(user)
         input_c = gets_car
         input_pd = gets_pd
         input_dd = gets_dd
+        #maybe create an error message if the dates are invalid
         trip_d = (input_dd.to_datetime - input_pd.to_datetime).to_f.ceil
         user_confirmation = confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
         # add functionality to allow customer to put "y"
@@ -59,6 +60,7 @@ def make_reservation(user)
                 create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
                 #lets change this to display reservation that was just created and 
                 #then ask if they would like to review all reservations or return to the main menu? 
+                #theres an issue with the most recent addition being included with the display reservations below. 
                 display_reservations(user)
             end
     end

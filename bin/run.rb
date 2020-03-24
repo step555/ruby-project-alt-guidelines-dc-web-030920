@@ -7,11 +7,23 @@ require_relative '../bin/make_payment'
 
 # puts "hello world"
 
-
-
-def user_input
+def not_yes_or_no
     gets.strip
 end
+
+    
+def user_input
+    input = gets.strip.upcase
+    if input == "N"
+        return input
+    elsif input == "Y"
+        return input
+    else
+        puts "Invalid entry, please try again."
+        user_input
+    end
+end
+
 
 
 run

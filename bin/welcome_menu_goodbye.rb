@@ -6,7 +6,7 @@ def car_image
    puts "  / ___     ~~--[""] |      ________-------'_"
     puts "> /~` \\    |-.   `\\~~.~~~~~                _ ~ - _"
     puts " ~|  ||\\%  |       |    ~  ._                ~ _   ~ ._"
-    puts"`_//|_%  \\      |          ~  .              ~-_   /\\"
+    puts"`_//|_%  \\      |          ~  .                  ~-_   /\\"
     puts"           `--__     |    _-____  /\\               ~-_ \\/."
     puts"                ~--_ /  ,/ -~-_ \\ \\/          _______---~/"
     puts"                  ~~-/._<   \\ \\`~~~~~~~~~~~~~     ##--~/"
@@ -35,7 +35,7 @@ end
 def main_menu(user)
     welcome_user(user)
     #selecting number option from menu 
-    menu_selection = user_input
+    menu_selection = not_yes_or_no
     if menu_selection == "1"
         # all the methods to let someone book a car
         make_reservation(user)
@@ -57,7 +57,7 @@ end
 def return_main_menu(user)
     puts "Would you like to return to the main menu? 'Y' or 'N'"
     answer2 = user_input
-    if answer2 = "Y"
+    if answer2 == "Y"
         main_menu(user)
     else
         goodbye

@@ -1,4 +1,3 @@
-
 def display_a_reservation(r, count)
         puts "~~~~~RESERVATION - #{count}~~~~~"
         car = Car.find_by(id: r.car_id)

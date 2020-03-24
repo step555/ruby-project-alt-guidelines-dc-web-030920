@@ -23,7 +23,7 @@ def make_payment(user)
             if answer == "Y" 
                 unpaid.each do |r|
                     r.paid = true
-                    r.save
+                    # r.save
                 end
                 puts "Payment confirmed! Thank you for your business!"
             else 
