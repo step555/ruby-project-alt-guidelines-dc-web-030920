@@ -1,5 +1,5 @@
 
-
+#creates a new user and saves it to the database.. requires the new username to be unique 
 def new_user
     puts "Please enter a username:"
     user_name = user_input
@@ -15,6 +15,7 @@ def new_user
         end
 end
 
+#runs login info... finds the user and returns to the main menu or prompts them to create an account 
 def login
     puts "Please login with your username:" #password later
     input = user_input

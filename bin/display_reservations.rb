@@ -20,11 +20,16 @@ end
 
 def display_reservations(user)
     # user = User.find_by(username: user_name)
-    count = 1 
-    puts "#{user.username.upcase}'S CONFIRMED RESERVATIONS"
-    user.reservations.each do |r|
-        display_a_reservation(r, count)
-        count += 1
+    res = user.reservations
+    if res.length == 0 
+       puts "You have no reservations at this time."
+    else
+        count = 1 
+        puts "#{user.username.upcase}'S CONFIRMED RESERVATIONS"
+        res.each do |r|
+            display_a_reservation(r, count)
+            count += 1
+        end
     end
     return_main_menu(user)
 end
