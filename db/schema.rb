@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_23_190614) do
+ActiveRecord::Schema.define(version: 2020_03_24_174124) do
 
   create_table "cars", force: :cascade do |t|
     t.string "make"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_190614) do
     t.datetime "pickup_date"
     t.datetime "dropoff_date"
     t.integer "trip_duration"
+    t.boolean "paid"
   end
 
   create_table "users", force: :cascade do |t|

@@ -21,11 +21,11 @@ car2 = Car.create(make: "Mazda", model: "3", year: 2016, license_plate: "Z00MZ00
 car3 = Car.create(make: "Toyota", model: "Prius", year: 2018, license_plate: "GO GRN", price_per_day: 42.99)
 car4 = Car.create(make: "Honda", model: "Accord", year: 2015, license_plate: "FHE12345", price_per_day: 62.99)
 
-res1 = Reservation.create(user_id: user2.id, car_id: car1.id, trip_duration: 4, pickup_date: '2020-12-20 12:00:00', dropoff_date: '2020-12-24 11:00:00')
-res2 = Reservation.create(user_id: user4.id, car_id: car3.id, trip_duration: 10, pickup_date: '2020-06-01 07:30:00', dropoff_date: '2020-06-11 11:45:00')
-res3 = Reservation.create(user_id: user3.id, car_id: car2.id, trip_duration: 1, pickup_date: '2020-11-27 13:00:00', dropoff_date: '2020-11-28 10:00:00')
-res4 = Reservation.create(user_id: user5.id, car_id: car4.id, trip_duration: 7, pickup_date: '2020-1-10 10:00:00', dropoff_date: '2020-1-17 10:00:00')
-res5 = Reservation.create(user_id: user2.id, car_id: car4.id, trip_duration: 2, pickup_date:'2020-11-20 14:00:00', dropoff_date: '2020-11-22 10:00:00')
+res1 = Reservation.create(user_id: user2.id, car_id: car1.id, trip_duration: 4, pickup_date: '2020-12-20 12:00:00', dropoff_date: '2020-12-24 11:00:00', paid: false)
+res2 = Reservation.create(user_id: user4.id, car_id: car3.id, trip_duration: 10, pickup_date: '2020-06-01 07:30:00', dropoff_date: '2020-06-11 11:45:00', paid: false)
+res3 = Reservation.create(user_id: user3.id, car_id: car2.id, trip_duration: 1, pickup_date: '2020-11-27 13:00:00', dropoff_date: '2020-11-28 10:00:00', paid: false)
+res4 = Reservation.create(user_id: user5.id, car_id: car4.id, trip_duration: 7, pickup_date: '2020-1-10 10:00:00', dropoff_date: '2020-1-17 10:00:00', paid: false)
+res5 = Reservation.create(user_id: user2.id, car_id: car4.id, trip_duration: 2, pickup_date:'2020-11-20 14:00:00', dropoff_date: '2020-11-22 10:00:00', paid: true)
 
 # https://stackoverflow.com/questions/1933720/how-do-i-insert-datetime-value-into-a-sqlite-database  
 # t.integer :user_id
