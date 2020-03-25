@@ -59,6 +59,7 @@ def make_reservation(user)
                 #lets change this to display reservation that was just created and 
                 #then ask if they would like to review all reservations or return to the main menu? 
                 #theres an issue with the most recent addition being included with the display reservations below. 
+                
                 display_reservations(user)
             end
     end

@@ -10,9 +10,8 @@ require 'date'
 # puts "hello world"
 
 
-
-
-run
+app = Cli.new
+app.welcome
 
 
 
