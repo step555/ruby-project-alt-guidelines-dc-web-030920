@@ -177,11 +177,8 @@ class Cli < ActiveRecord::Base
 
 #displays the reservations for the user instance - It needs to be moved to CLI .. but it works here for now. 
     def display_reservations
-        res = self.user.reservations
-        binding.pry
-        reload
-        res = self.user.reservations
-        binding.pry
+        # self.user.reservations.reload
+        res = self.user.reservations.reload
         if res.length == 0 
             puts "You don't have any reservations at this time."
         else
