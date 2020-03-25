@@ -4,7 +4,12 @@ class Cli < ActiveRecord::Base
     #displays a welcome message 
     def welcome
         car_image
+        # car_sound
         puts "WELCOME TO THE SUPER COOL CAR RENTAL APP!!! "
+    end
+
+    def car_sound
+        pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
     end
 
     #outputs an image of a car
@@ -182,9 +187,9 @@ class Cli < ActiveRecord::Base
             puts "You don't have any reservations at this time."
         else
             count = 1 
-            puts "#{self.user.username.upcase}'S CONFIRMED RESERVATIONS"
+            puts ("#{self.user.username.upcase}'S CONFIRMED RESERVATIONS").colorize(:green)
             res.each do |r|
-                puts "~~~~~RESERVATION - #{count}~~~~~"
+                puts ("~~~~~RESERVATION - #{count}~~~~~").colorize(:green)
                 display_a_reservation(r)
                 count += 1
             end
@@ -202,7 +207,16 @@ class Cli < ActiveRecord::Base
     end
 
     def are_you_sure
-        puts "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION?????? Input Y/N"
+        msg = "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION?????? Input 'Y' or 'N'"
+        puts ""
+            3.times do 
+                print "\r#{'  '*msg.size}"
+                sleep 0.5
+                print "\r#{ msg.colorize(:red)}"
+                sleep 0.5
+            end
+        system `say #{msg}`
+        puts ""
         input_yes_or_no
     end
 
@@ -214,7 +228,7 @@ class Cli < ActiveRecord::Base
         #display all user's reservations with future date 
         #display with ID number
         #ask user to enter the id number for the reservation they would like to cancel. 
-        future_res = self.user.reservations.select {|r| r.pickup_date > DateTime.now}
+        future_res = self.user.reservations.reload.select {|r| r.pickup_date > DateTime.now}
         if future_res.length == 0 
             puts "You have no future reservations"
             return_main_menu
@@ -228,7 +242,6 @@ class Cli < ActiveRecord::Base
         end
         return_main_menu
     end 
-
 
 
  #retireves a a user's unpaid resercations
@@ -273,7 +286,7 @@ class Cli < ActiveRecord::Base
     #out puts a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
-        car_image
+        # goodbye_car
         exit
     end
     
@@ -296,7 +309,7 @@ class Cli < ActiveRecord::Base
     end
 
         #retrieves a car input from the user
-        def car_input
+    def car_input
         input = gets.strip.to_i
         if input < 1 || input > Car.all.length
             puts "Invalid entry, please try again." 
@@ -306,6 +319,32 @@ class Cli < ActiveRecord::Base
         end
     end
     
+
+    # def goodbye_car
+    # puts <<-'EOF'
+    #         ___
+    #         _-_-  _/\______\\__
+    #     _-_-__  / ,-. -|-  ,-.`-.
+    #         _-_- `( o )----( o )-'
+    #             `-'      `-'
+    # EOF
+    # sleep 0.5
+    # puts <<-'EOF'
+    #                         ___
+    #                         _-_-  _/\______\\__
+    #                     _-_-__  / ,-. -|-  ,-.`-.
+    #                         _-_- `( o )----( o )-'
+    #                             `-'      `-'
+    # EOF
+    # sleep 0.5
+    # puts <<-'EOF'
+    #                                                     ___
+    #                                                     _-_-  _/\______\\__
+    #                                                 _-_-__  / ,-. -|-  ,-.`-.
+    #                                                     _-_- `( o )----( o )-'
+    #                                                         `-'      `-'
+    # EOF                                               
+    # end
 end
 
 
