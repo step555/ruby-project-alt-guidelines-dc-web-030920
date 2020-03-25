@@ -15,18 +15,18 @@
 #     end
 # end
 
-def car_input
-    input = gets.strip.to_i
-    if input < 1 || input >= Car.all.length
-        puts "Invalid entry, please try again." 
-        car_input
-    else
-        return input
-    end
-end
+# def car_input
+#     input = gets.strip.to_i
+#     if input < 1 || input >= Car.all.length
+#         puts "Invalid entry, please try again." 
+#         car_input
+#     else
+#         return input
+#     end
+# end
 
 
-def date_input
+# def date_input
 
 
-end
+# end
