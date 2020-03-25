@@ -42,20 +42,21 @@ class Cli
         exit
     end
 
-    # def new_user
-    #     puts "Please enter a username:"
-    #     user_name = not_yes_or_no
-    #     user_already_created = User.find_by(username: user_name)
-    #         if user_already_created
-    #             puts "I'm sorry, that username already exists"
-    #             new_user
-    #         else
-    #             puts "Please enter your age:"
-    #             i_age = not_yes_or_no
-    #             user = User.create(username: user_name, age: i_age)
-    #             main_menu(user)
-    #         end
-    # end
+    def new_user
+        puts "Please enter a username:"
+        username = input_text
+        user_already_created = User.find_by(username: username)
+            if user_already_created
+                puts "I'm sorry, that username already exists"
+                new_user
+            else
+                puts "Please enter your age:"
+                i_age = input_text
+                user = User.create(username: username, age: i_age)
+                self.user = user
+                # main_menu
+            end
+    end
     
     #runs login info... finds the user and returns to the main menu or prompts them to create an account 
     def login
@@ -70,7 +71,7 @@ class Cli
                 puts "No user found, would you like to create an account? 'Y' or 'N'"
                 answer = input_yes_or_no
                 if answer.upcase == "Y"
-                    # new_user
+                    new_user
                 elsif answer.upcase == "N"
                     goodbye
                 end
