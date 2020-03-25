@@ -1,22 +1,3 @@
-#what do we need to create a res
-
-def date_input
-
-
-end
-
-    
-# def user_input
-#     input = gets.strip.upcase
-#     if input == "N"
-#         return input
-#     elsif input == "Y"
-#         return input
-#     else
-#         puts "Invalid entry, please try again."
-#         user_input
-#     end
-# end
 
 def gets_car 
     puts "Please enter the number for the car would you like to book"
