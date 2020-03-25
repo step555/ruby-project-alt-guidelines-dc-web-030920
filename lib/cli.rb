@@ -1,7 +1,7 @@
 class Cli
     attr_accessor :user 
 
-
+    #outputs an image of a car
     def car_image
         puts <<-'E0F'
         ____----------- _____
@@ -20,6 +20,7 @@ class Cli
         E0F
     end
 
+    #the user can only enter a Y or N 
     def input_yes_or_no
         input = gets.strip.upcase
         if input == "N"
@@ -32,16 +33,44 @@ class Cli
         end
     end
 
+    #the user is expected to enter text or number
     def input_text
         gets.strip
     end
 
+    #out puts a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
         car_image
         exit
     end
 
+    #displays menu options with the cli's user's username 
+    def welcome_user
+        puts "Welcome #{self.user.username}. What would you like to do today?"
+        puts "1. Book a new reservation"
+        puts "2. Review Reservations"
+        puts "3. Make Payment"
+        puts "4. Quit"
+    end
+
+    def main_menu
+        welcome_user 
+        #selecting number option from menu 
+        menu_selection = input_text
+            if menu_selection == "1"
+                # all the methods to let someone book a car
+                # make_reservation(user)
+            elsif menu_selection == "2"
+                 self.user.display_reservations
+            elsif menu_selection == "3"
+                # make_payment(user)
+            elsif menu_selection == "4"
+                goodbye
+            end
+    end
+
+    #creates a new user and saves that user to the cli instance 
     def new_user
         puts "Please enter a username:"
         username = input_text
@@ -54,11 +83,11 @@ class Cli
                 i_age = input_text
                 user = User.create(username: username, age: i_age)
                 self.user = user
-                # main_menu
+                main_menu
             end
     end
     
-    #runs login info... finds the user and returns to the main menu or prompts them to create an account 
+    #allows the user to login, saves that user to the instance of CLI...or continues through new user if user does not exist
     def login
         puts "Please login with your username:" #password later
         input = input_text
@@ -66,7 +95,7 @@ class Cli
             if user 
                 #an instance of user is saved to the cli instance
                 self.user = user
-            #     main_menu
+                main_menu
             else 
                 puts "No user found, would you like to create an account? 'Y' or 'N'"
                 answer = input_yes_or_no
@@ -79,9 +108,10 @@ class Cli
     end
     
 
+    #displays a welcome message 
     def welcome
         car_image
-        login
+        puts "WELCOME TO THE SUPER COOL CAR RENTAL APP!!! "
     end
 
     

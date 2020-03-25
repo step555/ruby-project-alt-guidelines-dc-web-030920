@@ -12,6 +12,7 @@ require 'date'
 
 app = Cli.new
 app.welcome
+app.login
 
 
 
