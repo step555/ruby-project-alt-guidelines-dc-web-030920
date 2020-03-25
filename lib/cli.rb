@@ -9,21 +9,21 @@ class Cli < ActiveRecord::Base
 
     #outputs an image of a car
     def car_image
-        # puts <<-'EOF'
-        # ____----------- _____
-        # \~~~~~~~~~~/~_--~~~------~~~~~     \
-        #  `---`\  _-~      |                   \
-        #    _-~  <_         |                     \[]
-        #  / ___     ~~--[""] |      ________-------'_
-        # > /~` \    |-.   `\~~.~~~~~                _ ~ - _
-        #  ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
-        #    `_//|_%  \      |          ~  .              ~-_   /\
-        #           `--__     |    _-____  /\               ~-_ \/.
-        #                ~--_ /  ,/ -~-_ \ \/          _______---~/
-        #                    ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
-        #                          \    ) |`------##---~~~~-~  ) )
-        #                           ~-_/_/                  ~~ ~~
-        # EOF
+        puts <<-'EOF'
+        ____----------- _____
+        \~~~~~~~~~~/~_--~~~------~~~~~     \
+         `---`\  _-~      |                   \
+           _-~  <_         |                     \[]
+         / ___     ~~--[""] |      ________-------'_
+        > /~` \    |-.   `\~~.~~~~~                _ ~ - _
+         ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
+           `_//|_%  \      |          ~  .              ~-_   /\
+                  `--__     |    _-____  /\               ~-_ \/.
+                       ~--_ /  ,/ -~-_ \ \/          _______---~/
+                           ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
+                                 \    ) |`------##---~~~~-~  ) )
+                                  ~-_/_/                  ~~ ~~
+        EOF
     end
 
     #creates a new user and saves that user to the cli instance 
@@ -177,7 +177,6 @@ class Cli < ActiveRecord::Base
 
 #displays the reservations for the user instance - It needs to be moved to CLI .. but it works here for now. 
     def display_reservations
-        # self.user.reservations.reload
         res = self.user.reservations.reload
         if res.length == 0 
             puts "You don't have any reservations at this time."
