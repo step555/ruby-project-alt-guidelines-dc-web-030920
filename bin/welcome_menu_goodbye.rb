@@ -29,7 +29,6 @@ end
     puts "3. Make Payment"
     puts "4. Quit"
     #current reservation & reservation history
-    # puts "3. Make a payment"
 end
 
 def main_menu(user)

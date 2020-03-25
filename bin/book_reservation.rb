@@ -1,11 +1,29 @@
 #what do we need to create a res
 
+def date_input
+
+
+end
+
+    
+# def user_input
+#     input = gets.strip.upcase
+#     if input == "N"
+#         return input
+#     elsif input == "Y"
+#         return input
+#     else
+#         puts "Invalid entry, please try again."
+#         user_input
+#     end
+# end
+
 def gets_car 
     puts "Please enter the number for the car would you like to book"
     Car.all.each do |c|
         puts "#{c.id}. #{c.make} #{c.model} #{c.year} $#{c.price_per_day} per day."
     end
-    not_yes_or_no
+    car_input#not_yes_or_no
 end
 
 def gets_pd
@@ -55,7 +73,6 @@ def make_reservation(user)
         #maybe create an error message if the dates are invalid
         trip_d = (input_dd.to_datetime - input_pd.to_datetime).to_f.ceil
         user_confirmation = confirm_reservation(user, input_c, input_pd, input_dd, trip_d)
-        # add functionality to allow customer to put "y"
             if user_confirmation == "Y" 
                 create_reservation(input_u, input_c, input_pd, input_dd, trip_d)
                 #lets change this to display reservation that was just created and 
