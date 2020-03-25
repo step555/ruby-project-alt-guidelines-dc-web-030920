@@ -3,21 +3,21 @@ class Cli < ActiveRecord::Base
 
     #outputs an image of a car
     def car_image
-        puts <<-'E0F'
-        ____----------- _____
-        \~~~~~~~~~~/~_--~~~------~~~~~     \
-         `---`\  _-~      |                   \
-           _-~  <_         |                     \[]
-         / ___     ~~--[""] |      ________-------'_
-        > /~` \    |-.   `\~~.~~~~~                _ ~ - _
-         ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
-           `_//|_%  \      |          ~  .              ~-_   /\
-                  `--__     |    _-____  /\               ~-_ \/.
-                       ~--_ /  ,/ -~-_ \ \/          _______---~/
-                           ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
-                                 \    ) |`------##---~~~~-~  ) )
-                                  ~-_/_/                  ~~ ~~
-        E0F
+    #     puts <<-'E0F'
+    #     ____----------- _____
+    #     \~~~~~~~~~~/~_--~~~------~~~~~     \
+    #      `---`\  _-~      |                   \
+    #        _-~  <_         |                     \[]
+    #      / ___     ~~--[""] |      ________-------'_
+    #     > /~` \    |-.   `\~~.~~~~~                _ ~ - _
+    #      ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
+    #        `_//|_%  \      |          ~  .              ~-_   /\
+    #               `--__     |    _-____  /\               ~-_ \/.
+    #                    ~--_ /  ,/ -~-_ \ \/          _______---~/
+    #                        ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
+    #                              \    ) |`------##---~~~~-~  ) )
+    #                               ~-_/_/                  ~~ ~~
+    #     E0F
     end
 
     #the user can only enter a Y or N 
@@ -78,7 +78,7 @@ class Cli < ActiveRecord::Base
     def confirm_reservation(carid, pd, dd, trip_d)
         car = Car.find_by(id:carid)
         total_price = (trip_d*car.price_per_day).round(2)
-        puts "Please reveiw your reservation"
+        puts "Please review your reservation"
         puts "Customer: #{self.user.username}"
         puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
         puts "Pickup Date: #{pd}"
@@ -110,6 +110,45 @@ class Cli < ActiveRecord::Base
         end
     end
 
+       #retireves a a user's unpaid resercations
+    def unpaid_reservations
+        self.user.reservations.select do |r|
+            !r.paid 
+        end
+    end
+
+
+    def display_unpaid(unpaid)
+        puts "#{self.user.username.upcase} UNPAID RESERVATIONS"
+        count = 1 
+        total = 0 
+            unpaid.each do |r|
+                car = Car.find_by(id:r.car_id)
+                total += (car.price_per_day*r.trip_duration.to_f).round(2)
+                puts "~~~~ RESERVATION #{count} ~~~~"
+                    self.user.display_a_reservation(r)
+                count += 1 
+            end
+        puts "Would you like to pay your total balance of $#{total.round(2)}? 'Y' or 'N'"
+            answer = input_yes_or_no
+            if answer == "Y" 
+                self.user.change_all_reservations_to_paid
+                puts "Payment confirmed! Thank you for your business!"
+            else 
+                puts  "Please pay us sometime soon!"
+            end
+    end
+
+    #called on by the main menu. calls on unpaid reservations and displays them through display_unpaid. 
+    def make_payment
+     unpaid = unpaid_reservations
+        if unpaid.length > 0 
+            display_unpaid(unpaid)
+        else 
+            puts "You don't owe us any money!"
+        end
+    end
+
 
     #user views the mainmenu and makes a selection 
     def main_menu
@@ -123,7 +162,7 @@ class Cli < ActiveRecord::Base
                 self.user.display_reservations
                  return_main_menu
             elsif menu_selection == "3"
-                 self.user.make_payment
+                make_payment
                  return_main_menu
             elsif menu_selection == "4"
                 goodbye
