@@ -4,6 +4,7 @@ require_relative '../bin/display_reservations'
 require_relative '../bin/login'
 require_relative '../bin/welcome_menu_goodbye'
 require_relative '../bin/make_payment'
+require 'date'
 
 # puts "hello world"
 
@@ -38,5 +39,5 @@ end
 
 run
 
-require 'date'
+
 
