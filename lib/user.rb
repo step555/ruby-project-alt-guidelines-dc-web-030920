@@ -8,11 +8,11 @@ class User < ActiveRecord::Base
     end
 
 #changes all reservations to paid ** This should stay in User class 
-def change_all_reservations_to_paid
-    self.reservations.each do |r|
-        r.paid = true
-        r.save
+    def change_all_reservations_to_paid
+        self.reservations.each do |r|
+            r.paid = true
+            r.save
+        end
     end
-end
   
 end
