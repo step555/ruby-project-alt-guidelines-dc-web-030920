@@ -76,7 +76,8 @@ class Cli
                  self.user.display_reservations
                  return_main_menu
             elsif menu_selection == "3"
-                # make_payment(user)
+                 self.user.make_payment
+                 return_main_menu
             elsif menu_selection == "4"
                 goodbye
             end

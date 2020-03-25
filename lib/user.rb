@@ -85,21 +85,67 @@ class User < ActiveRecord::Base
 
 
     def book_reservation 
-        puts "Please enter the number for the car would you like to book"
-        Car.display_cars
-        carid = car_input
-        puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-        pd = input_text
-        puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-        dd = input_text
-        trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-        confirm_reservation(carid, pd, dd, trip_d)
-        response = input_yes_or_no
-            if response == 'Y'
-                create_reservation(carid,pd,dd,trip_d)
-                self.display_reservations
+        if self.age < 25
+            puts "I'm sorry! You're too young to rent a car!"
+        else
+            puts "Please enter the number for the car would you like to book"
+            Car.display_cars
+            carid = car_input
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            pd = input_text
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            dd = input_text
+            trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+            confirm_reservation(carid, pd, dd, trip_d)
+            response = input_yes_or_no
+                if response == 'Y'
+                    create_reservation(carid,pd,dd,trip_d)
+                    self.display_reservations
+                end
+        end
+    end
+
+    #retireves a a user's unpaid resercations
+    def unpaid_reservations
+        self.reservations.select do |r|
+            !r.paid 
+        end
+    end
+
+    def change_all_reservations_to_paid
+        self.reservations.each do |r|
+            r.paid = true
+            r.save
+        end
+    end
+
+    def display_unpaid(unpaid)
+        puts "#{self.username.upcase} UNPAID RESERVATIONS"
+        count = 1 
+        total = 0 
+            unpaid.each do |r|
+                car = Car.find_by(id:r.car_id)
+                total += (car.price_per_day*r.trip_duration.to_f).round(2)
+                puts "~~~~ RESERVATION #{count} ~~~~"
+                    display_a_reservation(r)
+                count += 1 
+            end
+        puts "Would you like to pay your total balance of $#{total.round(2)}? 'Y' or 'N'"
+            answer = input_yes_or_no
+            if answer == "Y" 
+                change_all_reservations_to_paid
+                puts "Payment confirmed! Thank you for your business!"
+            else 
+                puts  "Please pay us sometime soon!"
             end
     end
 
-
+    def make_payment
+     unpaid = self.unpaid_reservations
+        if unpaid.length > 0 
+            display_unpaid(unpaid)
+        else 
+            puts "You don't owe us any money!"
+        end
+    end
 end
