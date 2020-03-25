@@ -18,7 +18,7 @@ def make_payment(user)
             display_a_reservation(r,count)
             count += 1 
         end
-        puts "Would you like to pay your total balance of $#{total}? 'Y' or 'N'"
+        puts "Would you like to pay your total balance of $#{total.round(2)}? 'Y' or 'N'"
             answer = user_input
             if answer == "Y" 
                 unpaid.each do |r|
