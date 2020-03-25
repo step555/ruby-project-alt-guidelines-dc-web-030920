@@ -58,7 +58,7 @@ class Cli < ActiveRecord::Base
                 if answer.upcase == "Y"
                     new_user
                 elsif answer.upcase == "N"
-                    goodbye
+                    goodbye                 
                 end
             end
     end
@@ -68,8 +68,9 @@ class Cli < ActiveRecord::Base
         puts "Welcome #{self.user.username}. What would you like to do today?"
         puts "1. Book a new reservation"
         puts "2. Review Reservations"
-        puts "3. Make Payment"
-        puts "4. Quit"
+        puts "3. Cancel Reservations"
+        puts "4. Make Payment"
+        puts "5. Quit"
     end
 
     #user views the mainmenu and makes a selection 
@@ -84,12 +85,14 @@ class Cli < ActiveRecord::Base
                 display_reservations
                     return_main_menu
             elsif menu_selection == "3"
+                cancel_reservations
+            elsif menu_selection == "4"
                 make_payment
                     return_main_menu
-            elsif menu_selection == "4"
+            elsif menu_selection == "5"
                 goodbye
             else
-                puts "Please enter a valid input (1, 2, 3, or 4)"
+                puts "Invalid entry, please try again."
                 main_menu
             end
     end
@@ -104,13 +107,28 @@ class Cli < ActiveRecord::Base
         end
     end
     
+    def select_city 
+        puts "Where would you like to rent your car?"
+        City.all.each do |c|
+            puts "#{c.id}. #{c.name}"
+        end
+        input_text
+    end 
+    def select_car(city_id)
+        puts "Please enter the number for the car would you like to book"
+        city_cars = Car.all.select {|c| c.city_id == city_id.to_i}
+        city_cars.each do |c| 
+            puts "#{c.id}.#{c.make} #{c.model} #{c.year}...or similar $#{c.price_per_day} per day."
+        end
+        car_input
+    end
+
     def book_reservation 
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else
-            puts "Please enter the number for the car would you like to book"
-            Car.display_cars
-            carid = car_input
+            city_id = select_city
+            carid = select_car(city_id)
             puts "Select your pickup date YYYY-MM-DD HH:MM:00"
             pd = input_text
             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
@@ -174,7 +192,33 @@ class Cli < ActiveRecord::Base
         end
     end
 
-       #retireves a a user's unpaid resercations
+
+    def cancel_res(future_res)
+        puts "Please enter the Reservation ID for the reservation you would like to cancel."
+        future_res.each do |r|
+            puts "~~~RESERVATION ID: #{r.id}~~~~"
+            display_a_reservation(r)
+        end
+        input_text
+    end
+
+
+    def cancel_reservations
+        #display all user's reservations with future date 
+        #display with ID number
+        #ask user to enter the id number for the reservation they would like to cancel. 
+        future_res = self.user.reservations.select {|r| r.pickup_date > DateTime.now}
+        if future_res.length == 0 
+            puts "You have no future reservations"
+            return_main_menu
+        else
+            r_id = cancel_res(future_res)
+        end
+    end 
+
+
+
+ #retireves a a user's unpaid resercations
     def unpaid_reservations
         self.user.reservations.select do |r|
             !r.paid 
@@ -229,7 +273,7 @@ class Cli < ActiveRecord::Base
             return input
         else
             puts "Invalid entry, please try again."
-            user_input
+            input_yes_or_no
         end
     end
 

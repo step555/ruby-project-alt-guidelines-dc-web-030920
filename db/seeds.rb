@@ -16,10 +16,19 @@ user3 = User.create(username: "Bob", age: 57)
 user4 = User.create(username: "Margaret", age: 92)
 user5 = User.create(username: "Andy", age: 42)
 
-car1 = Car.create(make: "Ford", model: "Focus ST", year: 2014, license_plate: "TIK TOK", price_per_day: 55.99)
-car2 = Car.create(make: "Mazda", model: "3", year: 2016, license_plate: "Z00MZ00M", price_per_day: 49.99)
-car3 = Car.create(make: "Toyota", model: "Prius", year: 2018, license_plate: "GO GRN", price_per_day: 42.99)
-car4 = Car.create(make: "Honda", model: "Accord", year: 2015, license_plate: "FHE12345", price_per_day: 62.99)
+city1 = City.create(name: "Washington, DC")
+city2 = City.create(name: "New York, NY")
+city3 = City.create(name: "Boston, MA")
+
+car1 = Car.create(make: "Ford", model: "Focus ST", year: 2014, license_plate: "TIK TOK", price_per_day: 55.99, city_id: city1.id)
+car2 = Car.create(make: "Mazda", model: "3", year: 2016, license_plate: "Z00MZ00M", price_per_day: 49.99, city_id: city1.id)
+car3 = Car.create(make: "Toyota", model: "Prius", year: 2018, license_plate: "GO GRN", price_per_day: 42.99, city_id: city1.id)
+car4 = Car.create(make: "Honda", model: "Accord", year: 2015, license_plate: "FHE12345", price_per_day: 62.99, city_id: city2.id)
+car5 = Car.create(make: "Ford", model: "Focus ST", year: 2014, license_plate: "VKD3800", price_per_day: 55.99, city_id: city2.id)
+car6 = Car.create(make: "Mazda", model: "3", year: 2016, license_plate: "VROOMVROOM", price_per_day: 49.99, city_id: city2.id)
+car7 = Car.create(make: "Toyota", model: "Prius", year: 2018, license_plate: "Vegan4Life", price_per_day: 42.99, city_id: city3.id)
+car8 = Car.create(make: "Honda", model: "Accord", year: 2015, license_plate: "FASTCAR", price_per_day: 62.99, city_id: city3.id)
+
 
 res1 = Reservation.create(user_id: user2.id, car_id: car1.id, trip_duration: 4, pickup_date: '2020-12-20 12:00:00', dropoff_date: '2020-12-24 11:00:00', paid: false)
 res2 = Reservation.create(user_id: user4.id, car_id: car3.id, trip_duration: 10, pickup_date: '2020-06-01 07:30:00', dropoff_date: '2020-06-11 11:45:00', paid: false)

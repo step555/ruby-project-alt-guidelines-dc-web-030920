@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_25_162311) do
+ActiveRecord::Schema.define(version: 2020_03_25_192518) do
 
   create_table "cars", force: :cascade do |t|
     t.string "make"
@@ -18,6 +18,11 @@ ActiveRecord::Schema.define(version: 2020_03_25_162311) do
     t.integer "year"
     t.float "price_per_day"
     t.string "license_plate"
+    t.integer "city_id"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "clis", force: :cascade do |t|
