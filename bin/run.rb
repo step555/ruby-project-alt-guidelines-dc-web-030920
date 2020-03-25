@@ -10,7 +10,7 @@ require_relative '../config/environment'
 # puts "hello world"
 
 
-app = Cli.new
+app = Cli.create
 app.welcome
 app.login
 
