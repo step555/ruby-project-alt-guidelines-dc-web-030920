@@ -177,8 +177,11 @@ class Cli < ActiveRecord::Base
 
 #displays the reservations for the user instance - It needs to be moved to CLI .. but it works here for now. 
     def display_reservations
+        res = self.user.reservations
+        binding.pry
         reload
         res = self.user.reservations
+        binding.pry
         if res.length == 0 
             puts "You don't have any reservations at this time."
         else
@@ -194,14 +197,22 @@ class Cli < ActiveRecord::Base
 
 
     def cancel_res(future_res)
-        puts "Please enter the Reservation ID for the reservation you would like to cancel."
         future_res.each do |r|
             puts "~~~RESERVATION ID: #{r.id}~~~~"
             display_a_reservation(r)
         end
+        puts "Please enter the Reservation ID for the reservation you would like to cancel."
         input_text
     end
 
+    def are_you_sure
+        puts "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION?????? Input Y/N"
+        input_yes_or_no
+    end
+
+    def final_cancel(r_id)
+        Reservation.find_by(id: r_id).destroy
+    end 
 
     def cancel_reservations
         #display all user's reservations with future date 
@@ -213,7 +224,13 @@ class Cli < ActiveRecord::Base
             return_main_menu
         else
             r_id = cancel_res(future_res)
+            answer = are_you_sure
+            if answer == 'Y'
+                final_cancel(r_id)
+                puts "Your reservation has been cancelled."
+            end
         end
+        return_main_menu
     end 
 
 
