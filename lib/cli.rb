@@ -1,4 +1,4 @@
-class Cli
+class Cli < ActiveRecord::Base
     attr_accessor :user 
 
     #outputs an image of a car
@@ -38,6 +38,17 @@ class Cli
         gets.strip
     end
 
+     #retrieves a car input from the user
+     def car_input
+        input = gets.strip.to_i
+        if input < 1 || input > Car.all.length
+            puts "Invalid entry, please try again." 
+            car_input
+        else
+            return input
+        end
+    end
+
     #out puts a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
@@ -64,16 +75,52 @@ class Cli
         end
     end
 
+    def confirm_reservation(carid, pd, dd, trip_d)
+        car = Car.find_by(id:carid)
+        total_price = (trip_d*car.price_per_day).round(2)
+        puts "Please reveiw your reservation"
+        puts "Customer: #{self.user.username}"
+        puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
+        puts "Pickup Date: #{pd}"
+        puts "Dropoff Date: #{dd}"
+        puts "Trip Duration: #{trip_d} days"
+        puts "Price per day: $#{car.price_per_day}"
+        puts "Total Price: $#{total_price}"
+        puts "To confirm your reservation enter Y, To cancel and return to the main menu enter N"
+    end
+
+    def book_reservation 
+        if self.user.age < 25
+            puts "I'm sorry! You're too young to rent a car!"
+        else
+            puts "Please enter the number for the car would you like to book"
+            Car.display_cars
+            carid = car_input
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            pd = input_text
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            dd = input_text
+            trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+            confirm_reservation(carid, pd, dd, trip_d)
+            response = input_yes_or_no
+                if response == 'Y'
+                    self.user.create_reservation(carid,pd,dd,trip_d)
+                    self.user.display_reservations
+                end
+        end
+    end
+
+
     #user views the mainmenu and makes a selection 
     def main_menu
         welcome_user 
         #selecting number option from menu 
         menu_selection = input_text
             if menu_selection == "1"
-                self.user.book_reservation
-                 main_menu
+                book_reservation
+                return_main_menu
             elsif menu_selection == "2"
-                 self.user.display_reservations
+                self.user.display_reservations
                  return_main_menu
             elsif menu_selection == "3"
                  self.user.make_payment
