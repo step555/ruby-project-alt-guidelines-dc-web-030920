@@ -10,3 +10,5 @@ gem "faker"
 gem "rake"
 gem "colorize"
 gem 'rspec'
+gem 'rest-client'
+gem 'json'

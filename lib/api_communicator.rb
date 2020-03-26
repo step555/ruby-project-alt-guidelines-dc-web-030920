@@ -1,24 +1,24 @@
-# require 'rest-client'
-# require 'json'
-# require 'pry'
-# require 'awesome_print'
+require 'rest-client'
+require 'json'
+require 'pry'
 
-# def return_response_hash(url)
-#   response_string = RestClient.get(url)
-#   response_hash = JSON.parse(response_string)
-#   response_hash
-# end
+def return_response_hash(url)
+  response_string = RestClient.get(url)
+  response_hash = JSON.parse(response_string)
+  response_hash
+end
 
-# def get_character_movies_from_api(character_name)
-#   response_hash = return_response_hash('https://icanhazdadjoke.com/')
-#     binding.pry
-# #   character_info = response_hash["results"].find { |result| result["name"] == character_name.strip}
-# #   movie_urls = character_info["films"]
-# #   movie_hash = movie_urls.map do |url|
-# #     return_response_hash(url)
-# #   end
-# #   movie_hash
-# end
+def play_with_api
+    binding.pry
+  response_hash = return_response_hash('https://icanhazdadjoke.com/')
+    binding.pry
+#   character_info = response_hash["results"].find { |result| result["name"] == character_name.strip}
+#   movie_urls = character_info["films"]
+#   movie_hash = movie_urls.map do |url|
+#     return_response_hash(url)
+#   end
+#   movie_hash
+end
 
 # # def print_movies(films)
 # #     # some iteration magic and puts out the movies in a nice list
