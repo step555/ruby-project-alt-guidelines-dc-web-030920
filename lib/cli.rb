@@ -123,211 +123,38 @@ class Cli < ActiveRecord::Base
         car_input
     end
 
-    # def invalid_date
-    #     begin
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #         pd = input_text
-    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #         dd = input_text
-    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #      rescue
-    #        puts "Invalid entry, please try again"
-    #        book_reservation
-    #      else
-    #         confirm_reservation(carid, pd, dd, trip_d)
-    #      end
-    # end
-
-    # def book_reservation 
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city
-    #         carid = select_car(city_id)
-    #     end
-    #     begin
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #         pd = input_text
-    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #         dd = input_text
-    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #         rescue
-    #         puts "Invalid entry, please try again!"
-    #         book_reservation
-    #         else
-    #         confirm_reservation(carid, pd, dd, trip_d)
-    #         end
-    #     response = input_yes_or_no
-    #     if response == 'Y'
-    #         self.user.create_reservation(carid,pd,dd,trip_d)
-    #         display_reservations
-    #     end
-    # end
-
     def book_reservation #WORKS
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else
             city_id = select_city
-            $carid = select_car(city_id)
+            $çarid = select_car(city_id)
         end
         def book_reservation_dates
             begin
-                puts "Select your pickup date YYYY-MM-DD HH:MM:00"
+                puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
                 pd = input_text
                 puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
                 dd = input_text
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-                rescue
+                rescue #rescue NameError, ArgumentError #these two need to be tested later
                 puts "Invalid entry, please try again!"
                 book_reservation_dates
                 else
-                confirm_reservation($carid, pd, dd, trip_d)
+                confirm_reservation($çarid, pd, dd, trip_d)
                 end
             response = input_yes_or_no
             if response == 'Y'
-                self.user.create_reservation($carid,pd,dd,trip_d)
+                self.user.create_reservation($çarid,pd,dd,trip_d)
                 display_reservations
             end
         end
         book_reservation_dates
     end
 
-    # def book_reservation
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city
-    #         carid = select_car(city_id)
-    #     end
-    #     book_reservation_dates
-    #     confirm_reservation(carid, pd, dd, trip_d)
-    #     response = input_yes_or_no
-    #     if response == 'Y'
-    #         self.user.create_reservation(carid, pd, dd, trip_d)
-    #         display_reservations
-    #     end
-    # end
-
-    # def book_reservation_dates
-    #         begin
-    #             puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #             pd = input_text
-    #             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #             dd = input_text
-    #             trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #             rescue
-    #             puts "Invalid entry, please try again!"
-    #             book_reservation_dates
-    #             else
-    #             # confirm_reservation(carid, pd, dd, trip_d)
-    #                 nil
-    #             end
-    #         # response = input_yes_or_no
-    #         # if response == 'Y'
-    #         #     self.user.create_reservation(carid, pd, dd, trip_d)
-    #         #     display_reservations
-    #         # end
-    # end
-
-    # def pd
-    #     begin
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #         pickup_date = input_text
-    #     rescue
-    #         puts "Invalid entry, please try again!!@#$%^&*()"
-    #         pd
-    #     else
-    #         return pickup_date
-    #     end
-    # end
-
-    # def dd
-    #     begin
-    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #         dropoff_date = input_text
-    #     rescue
-    #         puts "Invalid entry, please try again!!@#$%^&*()"
-    #         dd
-    #     else
-    #         return dropoff_date
-    #     end
-    # end
-
-    # def book_reservation 
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city
-    #         carid = select_car(city_id)
-    #         pd
-    #         dd
-    #     begin
-    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #     rescue 
-    #         "Invalid input"
-    #         pd
-    #     else
-    #         confirm_reservation(carid, pd, dd, trip_d)
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(carid,pd,dd,trip_d)
-    #             display_reservations
-    #             end
-    #         end
-    #     end
-    # end
-
-    # def pickup
-    #     puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #     pickup_date = input_text
-    # end
-
-    # def dropoff
-    #     puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #     dropoff_date = input_text
-    # end
-
-    # def duration
-    #     pd = pickup
-    #     dd = dropoff
-    #     trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #     # rescue
-    #     #     "YOU HIT ME" #"Invalid input"
-    #     # else
-    #         # pd = pickup
-    #         # dd = dropoff
-    #         trip_d = duration
-    #         confirm_reservation(carid, pd, dd, trip_d)
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(carid,pd,dd,trip_d)
-    #             display_reservations
-    #         # end
-    #     end
-    # end
-
-    # def book_reservation 
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city
-    #         carid = select_car(city_id)
-    #         pd = pickup
-    #         dd = dropoff
-    #         trip_d = duration
-    #         confirm_reservation(carid, pd, dd, trip_d)
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(carid,pd,dd,trip_d)
-    #             display_reservations
-    #         end
-    #     end
-    # end
-    
     def confirm_reservation(carid, pd, dd, trip_d)
         car = Car.find_by(id:carid)
-        total_price = (trip_d*car.price_per_day)#.round(2)
+        total_price = (trip_d*car.price_per_day).round(2)
         puts "Please review your reservation"
         puts "Customer: #{self.user.username}"
         puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
