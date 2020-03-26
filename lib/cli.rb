@@ -213,7 +213,7 @@ class Cli < ActiveRecord::Base
             begin
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
                 if trip_d < 0
-                    puts "Your trip duration cannot be negative. Please re-select your dates"
+                    puts "Your dropoff date cannot be before your pickup date. Please re-select your dates"
                     return book_reservation
                 end
             rescue #rescue NameError, ArgumentError #these two need to be tested later
