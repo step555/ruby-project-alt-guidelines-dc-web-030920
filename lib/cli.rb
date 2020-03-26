@@ -14,21 +14,21 @@ class Cli < ActiveRecord::Base
 
     #outputs an image of a car
     def car_image
-        # puts <<-'EOF'
-        # ____----------- _____
-        # \~~~~~~~~~~/~_--~~~------~~~~~     \
-        #  `---`\  _-~      |                   \
-        #    _-~  <_         |                     \[]
-        #  / ___     ~~--[""] |      ________-------'_
-        # > /~` \    |-.   `\~~.~~~~~                _ ~ - _
-        #  ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
-        #    `_//|_%  \      |          ~  .              ~-_   /\
-        #           `--__     |    _-____  /\               ~-_ \/.
-        #                ~--_ /  ,/ -~-_ \ \/          _______---~/
-        #                    ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
-        #                          \    ) |`------##---~~~~-~  ) )
-        #                           ~-_/_/                  ~~ ~~
-        # EOF
+        puts <<-'EOF'
+        ____----------- _____
+        \~~~~~~~~~~/~_--~~~------~~~~~     \
+         `---`\  _-~      |                   \
+           _-~  <_         |                     \[]
+         / ___     ~~--[""] |      ________-------'_
+        > /~` \    |-.   `\~~.~~~~~                _ ~ - _
+         ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
+           `_//|_%  \      |          ~  .              ~-_   /\
+                  `--__     |    _-____  /\               ~-_ \/.
+                       ~--_ /  ,/ -~-_ \ \/          _______---~/
+                           ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
+                                 \    ) |`------##---~~~~-~  ) )
+                                  ~-_/_/                  ~~ ~~
+        EOF
     end
 
     #creates a new user and saves that user to the cli instance 
@@ -219,9 +219,13 @@ class Cli < ActiveRecord::Base
             dd = input_text
             begin
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+                    if trip_d < 0 
+                        puts "The drop off date you entered is before your pick up date. Please start again."
+                        return book_reservation
+                    end 
             rescue #rescue NameError, ArgumentError #these two need to be tested later
                 puts "Invalid entry, please try again!"
-                book_reservation
+                return book_reservation
             else
                 city_id = select_city.to_i
                 car_id = select_car(city_id)
@@ -255,7 +259,7 @@ class Cli < ActiveRecord::Base
         puts "Pickup Date: #{r.pickup_date}"        
         puts "Dropoff date: #{r.dropoff_date}"
         puts "Trip duration: #{r.trip_duration}"
-        puts "Car: #{car.make} #{car.model} #{car.year}...or similiar"
+        puts "Car: #{car.make} #{car.model} #{car.year}"
         puts "License plate: #{car.license_plate}"
         puts "Price per Day: $#{car.price_per_day}"
         total_price = (car.price_per_day*r.trip_duration.to_f).round(2)
@@ -394,16 +398,6 @@ class Cli < ActiveRecord::Base
         gets.strip
     end
 
-        #retrieves a car input from the user
-    # def car_input
-    #     input = gets.strip.to_i
-    #     if input < 1 || input > Car.all.length
-    #         puts "Invalid entry, please try again." 
-    #         car_input
-    #     else
-    #         return input
-    #     end
-    # end
     
 
     # def goodbye_car
