@@ -141,28 +141,29 @@ class Cli < ActiveRecord::Base
 
 
     #does not include error messages for dates. 
-    def book_reservation 
-        if self.user.age < 25
-            puts "I'm sorry! You're too young to rent a car!"
-        else
-            city_id = select_city
-            carid = select_car(city_id)
-            puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-            pd = input_text
-            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-            dd = input_text
-            # check_dates(pd,dd)
-            trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-            confirm_reservation(carid, pd, dd, trip_d)
-            response = input_yes_or_no
-            if response == 'Y'
-                self.user.create_reservation(carid,pd,dd,trip_d)
-                display_reservations
-            end
-        end
-    end
+    # def book_reservation_old_version
+    #     if self.user.age < 25
+    #         puts "I'm sorry! You're too young to rent a car!"
+    #     else
+    #         puts "Please enter the number for the car would you like to book"
+    #         Car.display_cars
+    #         carid = car_input
+    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
+    #         pd = input_text
+    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+    #         dd = input_text
+    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+    #         confirm_reservation(carid, pd, dd, trip_d)
+    #         response = input_yes_or_no
+    #         if response == 'Y'
+    #             self.user.create_reservation(carid,pd,dd,trip_d)
+    #             display_reservations
+    #         end
+    #     end
+    # end
 
-    # def book_reservation #WORKS
+
+    # def book_reservation_city_and_carid_first#WORKS
     #     if self.user.age < 25
     #         puts "I'm sorry! You're too young to rent a car!"
     #     else
@@ -191,32 +192,33 @@ class Cli < ActiveRecord::Base
     #     book_reservation_dates
     # end
 
-    # def book_reservation #WORKS
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
-    #         pd = input_text
-    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #         dd = input_text
-    #         begin
-    #             trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #         rescue #rescue NameError, ArgumentError #these two need to be tested later
-    #             puts "Invalid entry, please try again!"
-    #             book_reservation
-    #         else
-    #             city_id = select_city
-    #             carid = select_car(city_id)
-    #             confirm_reservation(carid, pd, dd, trip_d)
-    #             end
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(carid,pd,dd,trip_d)
-    #             display_reservations
-    #         end
-    #     end
-    # end
+    def book_reservation #WORKS
+        if self.user.age < 25
+            puts "I'm sorry! You're too young to rent a car!"
+        else
+            puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
+            pd = input_text
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            dd = input_text
+            begin
+                trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+            rescue #rescue NameError, ArgumentError #these two need to be tested later
+                puts "Invalid entry, please try again!"
+                book_reservation
+            else
+                city_id = select_city
+                carid = select_car(city_id)
+                confirm_reservation(carid, pd, dd, trip_d)
+                end
+            response = input_yes_or_no
+            if response == 'Y'
+                self.user.create_reservation(carid,pd,dd,trip_d)
+                display_reservations
+            end
+        end
+    end
     
+
     def confirm_reservation(carid, pd, dd, trip_d)
         car = Car.find_by(id:carid)
         total_price = (trip_d*car.price_per_day).round(2)
@@ -231,7 +233,6 @@ class Cli < ActiveRecord::Base
         puts "To confirm your reservation enter Y, To cancel and return to the main menu enter N"
     end
 
-    # This displays one reservation - It needs to be moved to CLI .. but it works here for now. 
     def display_a_reservation(r)  
         car = Car.find_by(id: r.car_id)
         puts "Pickup Date: #{r.pickup_date}"        
@@ -249,7 +250,6 @@ class Cli < ActiveRecord::Base
         end
     end
 
-#displays the reservations for the user instance - It needs to be moved to CLI .. but it works here for now. 
     def display_reservations
         res = self.user.reservations.reload
         if res.length == 0 
@@ -367,7 +367,7 @@ class Cli < ActiveRecord::Base
         elsif input == "Y"
             return input
         else
-            puts "Invalid entry, please try again."
+            puts "Invalid entry, please try again"
             input_yes_or_no
         end
     end
