@@ -376,7 +376,11 @@ class Cli < ActiveRecord::Base
     #out puts a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
-        # goodbye_car
+        # goodbye_car1
+        # sleep 0.5
+        # goodbye_car2
+        # sleep 0.5
+        # goodbye_car3
         exit
     end
     
@@ -399,32 +403,36 @@ class Cli < ActiveRecord::Base
     end
 
     
-
-    # def goodbye_car
-    # puts <<-'EOF'
+    # def goodbye_car1
+    #     print <<-'EOF'
     #         ___
     #         _-_-  _/\______\\__
     #     _-_-__  / ,-. -|-  ,-.`-.
     #         _-_- `( o )----( o )-'
     #             `-'      `-'
     # EOF
-    # sleep 0.5
-    # puts <<-'EOF'
+    # end
+    
+    # def goodbye_car2
+    # print <<-'EOF'
     #                         ___
     #                         _-_-  _/\______\\__
     #                     _-_-__  / ,-. -|-  ,-.`-.
     #                         _-_- `( o )----( o )-'
     #                             `-'      `-'
     # EOF
-    # sleep 0.5
-    # puts <<-'EOF'
-    #                                                     ___
-    #                                                     _-_-  _/\______\\__
-    #                                                 _-_-__  / ,-. -|-  ,-.`-.
-    #                                                     _-_- `( o )----( o )-'
-    #                                                         `-'      `-'
-    # EOF                                               
     # end
+ 
+    # def goodbye_car3
+    #     print <<-'EOF'
+    #                                                 ___
+    #                                                 _-_-  _/\______\\__
+    #                                             _-_-__  / ,-. -|-  ,-.`-.
+    #                                                 _-_- `( o )----( o )-'
+    #                                                     `-'      `-'
+    # EOF
+    # end
+
 end
 
 
