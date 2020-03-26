@@ -14,21 +14,21 @@ class Cli < ActiveRecord::Base
 
     #outputs an image of a car
     def car_image
-        puts <<-'EOF'
-        ____----------- _____
-        \~~~~~~~~~~/~_--~~~------~~~~~     \
-         `---`\  _-~      |                   \
-           _-~  <_         |                     \[]
-         / ___     ~~--[""] |      ________-------'_
-        > /~` \    |-.   `\~~.~~~~~                _ ~ - _
-         ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
-           `_//|_%  \      |          ~  .              ~-_   /\
-                  `--__     |    _-____  /\               ~-_ \/.
-                       ~--_ /  ,/ -~-_ \ \/          _______---~/
-                           ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
-                                 \    ) |`------##---~~~~-~  ) )
-                                  ~-_/_/                  ~~ ~~
-        EOF
+        # puts <<-'EOF'
+        # ____----------- _____
+        # \~~~~~~~~~~/~_--~~~------~~~~~     \
+        #  `---`\  _-~      |                   \
+        #    _-~  <_         |                     \[]
+        #  / ___     ~~--[""] |      ________-------'_
+        # > /~` \    |-.   `\~~.~~~~~                _ ~ - _
+        #  ~|  ||\%  |       |    ~  ._                ~ _   ~ ._
+        #    `_//|_%  \      |          ~  .              ~-_   /\
+        #           `--__     |    _-____  /\               ~-_ \/.
+        #                ~--_ /  ,/ -~-_ \ \/          _______---~/
+        #                    ~~-/._<   \ \`~~~~~~~~~~~~~     ##--~/
+        #                          \    ) |`------##---~~~~-~  ) )
+        #                           ~-_/_/                  ~~ ~~
+        # EOF
     end
 
     #creates a new user and saves that user to the cli instance 
@@ -128,24 +128,53 @@ class Cli < ActiveRecord::Base
         car_input
     end
 
-    def book_reservation 
+    # def book_reservation 
+    #     if self.user.age < 25
+    #         puts "I'm sorry! You're too young to rent a car!"
+    #     else
+    #         city_id = select_city
+    #         carid = select_car(city_id)
+    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
+    #         pd = input_text
+    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+    #         dd = input_text
+    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+    #         confirm_reservation(carid, pd, dd, trip_d)
+    #         response = input_yes_or_no
+    #         if response == 'Y'
+    #             self.user.create_reservation(carid,pd,dd,trip_d)
+    #             display_reservations
+    #         end
+    #     end
+    # end
+
+    def book_reservation #WORKS
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else
             city_id = select_city
-            carid = select_car(city_id)
-            puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-            pd = input_text
-            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-            dd = input_text
-            trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-            confirm_reservation(carid, pd, dd, trip_d)
+            $çarid = select_car(city_id)
+        end
+        def book_reservation_dates
+            begin
+                puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
+                pd = input_text
+                puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+                dd = input_text
+                trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+                rescue #rescue NameError, ArgumentError #these two need to be tested later
+                puts "Invalid entry, please try again!"
+                book_reservation_dates
+                else
+                confirm_reservation($çarid, pd, dd, trip_d)
+                end
             response = input_yes_or_no
             if response == 'Y'
-                self.user.create_reservation(carid,pd,dd,trip_d)
+                self.user.create_reservation($çarid,pd,dd,trip_d)
                 display_reservations
             end
         end
+        book_reservation_dates
     end
     
     def confirm_reservation(carid, pd, dd, trip_d)
