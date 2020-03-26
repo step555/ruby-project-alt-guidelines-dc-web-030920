@@ -4,11 +4,12 @@ class Car < ActiveRecord::Base
     belongs_to :city
 
 
-    def self.display_cars
-        Car.all.each do |c|
-            puts "#{c.id}. #{c.make} #{c.model} #{c.year} $#{c.price_per_day} per day."
+
+    def self.city_cars(city_id)
+     Car.all.select do |c|
+            c.city_id == city_id
         end
     end
 
-
+    
 end

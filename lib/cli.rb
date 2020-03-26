@@ -119,13 +119,28 @@ class Cli < ActiveRecord::Base
         end
         input_text
     end 
-    def select_car(city_id)
-        puts "Please enter the number for the car would you like to book"
-        city_cars = Car.all.select {|c| c.city_id == city_id.to_i}
-        city_cars.each do |c| 
-            puts "#{c.id}.#{c.make} #{c.model} #{c.year}...or similar $#{c.price_per_day} per day."
+
+    def display_cars(array)
+        counter = 1
+        array.each do |c|
+            puts "#{counter}. #{c.make} #{c.model} #{c.year} $#{c.price_per_day} per day."
+            counter +=1 
         end
-        car_input
+    end
+
+
+    def select_car(city_id)
+        city_cars = Car.city_cars(city_id)
+        puts "Please enter the number for the car you would like to book."
+        display_cars(city_cars)
+        input = input_text
+        index = input.to_i - 1 
+            if index < 1 || index > city_cars.length
+                 puts "Invalid entry, please try again." 
+                 select_car(city_id)
+            else
+                return city_cars[index].id
+            end
     end
 
     # def select_date
@@ -139,24 +154,26 @@ class Cli < ActiveRecord::Base
     #     return date
     # end
 
+  
 
-    #does not include error messages for dates. 
-    # def book_reservation_old_version
+    # does not include error messages for dates. 
+    # def book_reservation
     #     if self.user.age < 25
     #         puts "I'm sorry! You're too young to rent a car!"
     #     else
+    #         city_id = select_city.to_i
     #         puts "Please enter the number for the car would you like to book"
-    #         Car.display_cars
-    #         carid = car_input
+    #         car_id = select_car(city_id)
+    #         # carid = car_input
     #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
     #         pd = input_text
     #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
     #         dd = input_text
     #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #         confirm_reservation(carid, pd, dd, trip_d)
+    #         confirm_reservation(car_id, pd, dd, trip_d)
     #         response = input_yes_or_no
     #         if response == 'Y'
-    #             self.user.create_reservation(carid,pd,dd,trip_d)
+    #             self.user.create_reservation(car_id,pd,dd,trip_d)
     #             display_reservations
     #         end
     #     end
@@ -206,13 +223,13 @@ class Cli < ActiveRecord::Base
                 puts "Invalid entry, please try again!"
                 book_reservation
             else
-                city_id = select_city
-                carid = select_car(city_id)
-                confirm_reservation(carid, pd, dd, trip_d)
+                city_id = select_city.to_i
+                car_id = select_car(city_id)
+                confirm_reservation(car_id, pd, dd, trip_d)
                 end
             response = input_yes_or_no
             if response == 'Y'
-                self.user.create_reservation(carid,pd,dd,trip_d)
+                self.user.create_reservation(car_id,pd,dd,trip_d)
                 display_reservations
             end
         end
@@ -230,7 +247,7 @@ class Cli < ActiveRecord::Base
         puts "Trip Duration: #{trip_d} days"
         puts "Price per day: $#{car.price_per_day}"
         puts "Total Price: $#{total_price}"
-        puts "To confirm your reservation enter Y, To cancel and return to the main menu enter N"
+        puts "To confirm your reservation enter Y, To cancel enter N."
     end
 
     def display_a_reservation(r)  
@@ -378,15 +395,15 @@ class Cli < ActiveRecord::Base
     end
 
         #retrieves a car input from the user
-    def car_input
-        input = gets.strip.to_i
-        if input < 1 || input > Car.all.length
-            puts "Invalid entry, please try again." 
-            car_input
-        else
-            return input
-        end
-    end
+    # def car_input
+    #     input = gets.strip.to_i
+    #     if input < 1 || input > Car.all.length
+    #         puts "Invalid entry, please try again." 
+    #         car_input
+    #     else
+    #         return input
+    #     end
+    # end
     
 
     # def goodbye_car
