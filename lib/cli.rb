@@ -46,8 +46,8 @@ class Cli < ActiveRecord::Base
                 # self.user = user
                 # main_menu
                 new_user_age
-                # user = User.create(username: username, age: i_age)
-                # self.user = user
+                user = User.create(username: username, age: new_user_age)
+                self.user = user
                 main_menu
             end
     end
@@ -58,11 +58,12 @@ class Cli < ActiveRecord::Base
         if i_age <= 0
             invalid_entry_message
             new_user_age
-        else
-            user = User.create(username: username, age: i_age)
-            self.user = user
-            main_menu
+        # else
+        #     user = User.create(username: username, age: i_age)
+        #     self.user = user
+        #     main_menu
         end
+        return new_user_age
     end
     
     #allows the user to login, saves that user to the instance of CLI...or continues through new user if user does not exist
