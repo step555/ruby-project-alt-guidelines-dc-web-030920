@@ -128,18 +128,87 @@ class Cli < ActiveRecord::Base
         car_input
     end
 
-    # def book_reservation 
+    # def select_date
+    #     date = gets.strip
+    #     begin
+    #         date = date.to_datetime
+    #     rescue
+    #         puts "Invalid entry, please select your date in this format YYYY-MM-DD"
+    #         select_date
+    #     end
+    #     return date
+    # end
+
+
+    #does not include error messages for dates. 
+    def book_reservation 
+        if self.user.age < 25
+            puts "I'm sorry! You're too young to rent a car!"
+        else
+            city_id = select_city
+            carid = select_car(city_id)
+            puts "Select your pickup date YYYY-MM-DD HH:MM:00"
+            pd = input_text
+            puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+            dd = input_text
+            # check_dates(pd,dd)
+            trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+            confirm_reservation(carid, pd, dd, trip_d)
+            response = input_yes_or_no
+            if response == 'Y'
+                self.user.create_reservation(carid,pd,dd,trip_d)
+                display_reservations
+            end
+        end
+    end
+
+    # def book_reservation #WORKS
     #     if self.user.age < 25
     #         puts "I'm sorry! You're too young to rent a car!"
     #     else
     #         city_id = select_city
-    #         carid = select_car(city_id)
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
+    #         çarid = select_car(city_id)
+    #     end
+    #     def book_reservation_dates
+    #         begin
+    #             puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
+    #             pd = input_text
+    #             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
+    #             dd = input_text
+    #             trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+    #             rescue #rescue NameError, ArgumentError #these two need to be tested later
+    #             puts "Invalid entry, please try again!"
+    #             book_reservation_dates
+    #             else
+    #             confirm_reservation(çarid, pd, dd, trip_d)
+    #             end
+    #         response = input_yes_or_no
+    #         if response == 'Y'
+    #             self.user.create_reservation(çarid,pd,dd,trip_d)
+    #             display_reservations
+    #         end
+    #     end
+    #     book_reservation_dates
+    # end
+
+    # def book_reservation #WORKS
+    #     if self.user.age < 25
+    #         puts "I'm sorry! You're too young to rent a car!"
+    #     else
+    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
     #         pd = input_text
     #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
     #         dd = input_text
-    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #         confirm_reservation(carid, pd, dd, trip_d)
+    #         begin
+    #             trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+    #         rescue #rescue NameError, ArgumentError #these two need to be tested later
+    #             puts "Invalid entry, please try again!"
+    #             book_reservation
+    #         else
+    #             city_id = select_city
+    #             carid = select_car(city_id)
+    #             confirm_reservation(carid, pd, dd, trip_d)
+    #             end
     #         response = input_yes_or_no
     #         if response == 'Y'
     #             self.user.create_reservation(carid,pd,dd,trip_d)
@@ -147,35 +216,6 @@ class Cli < ActiveRecord::Base
     #         end
     #     end
     # end
-
-    def book_reservation #WORKS
-        if self.user.age < 25
-            puts "I'm sorry! You're too young to rent a car!"
-        else
-            city_id = select_city
-            $çarid = select_car(city_id)
-        end
-        def book_reservation_dates
-            begin
-                puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
-                pd = input_text
-                puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-                dd = input_text
-                trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-                rescue #rescue NameError, ArgumentError #these two need to be tested later
-                puts "Invalid entry, please try again!"
-                book_reservation_dates
-                else
-                confirm_reservation($çarid, pd, dd, trip_d)
-                end
-            response = input_yes_or_no
-            if response == 'Y'
-                self.user.create_reservation($çarid,pd,dd,trip_d)
-                display_reservations
-            end
-        end
-        book_reservation_dates
-    end
     
     def confirm_reservation(carid, pd, dd, trip_d)
         car = Car.find_by(id:carid)
