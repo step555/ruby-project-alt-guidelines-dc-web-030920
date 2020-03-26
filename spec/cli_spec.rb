@@ -1,5 +1,5 @@
-require_relative "../lib/cli.rb"
 
+require_relative "../lib/cli.rb"
 
 describe "CLI" do 
     let (:cli) {Cli.new}

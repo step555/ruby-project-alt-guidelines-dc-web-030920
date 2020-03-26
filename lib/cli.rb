@@ -8,9 +8,6 @@ class Cli < ActiveRecord::Base
         puts "WELCOME TO THE SUPER COOL CAR RENTAL APP!!! "
     end
 
-    def car_sound
-        pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
-    end
 
     #outputs an image of a car
     def car_image
@@ -40,17 +37,26 @@ class Cli < ActiveRecord::Base
                 puts "I'm sorry, that username already exists"
                 new_user
             else
-                puts "Please enter your age:"
-                i_age = input_text
+                i_age = new_user_age
                 user = User.create(username: username, age: i_age)
                 self.user = user
                 main_menu
             end
     end
+
+    def new_user_age
+        puts "Please enter your age:"
+        i_age = input_text.to_i
+        if i_age <= 0
+            invalid_entry_message
+            new_user_age
+        end
+        return i_age
+    end
     
     #allows the user to login, saves that user to the instance of CLI...or continues through new user if user does not exist
     def login
-        puts "Please login with your username:" #password later
+        puts "Please login with your username:"
         input = input_text
         user = User.find_by(username:input)
             if user 
@@ -85,7 +91,8 @@ class Cli < ActiveRecord::Base
         menu_selection = input_text
             if menu_selection == "1"
                 book_reservation
-                return_main_menu
+                # return_main_menu
+                main_menu
             elsif menu_selection == "2"
                 display_reservations
                     return_main_menu
@@ -97,7 +104,7 @@ class Cli < ActiveRecord::Base
             elsif menu_selection == "5"
                 goodbye
             else
-                puts "Invalid entry, please try again."
+                invalid_entry_message
                 main_menu
             end
     end
@@ -143,73 +150,9 @@ class Cli < ActiveRecord::Base
             end
     end
 
-    # def select_date
-    #     date = gets.strip
-    #     begin
-    #         date = date.to_datetime
-    #     rescue
-    #         puts "Invalid entry, please select your date in this format YYYY-MM-DD"
-    #         select_date
-    #     end
-    #     return date
-    # end
-
   
-
-    # does not include error messages for dates. 
-    # def book_reservation
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city.to_i
-    #         puts "Please enter the number for the car would you like to book"
-    #         car_id = select_car(city_id)
-    #         # carid = car_input
-    #         puts "Select your pickup date YYYY-MM-DD HH:MM:00"
-    #         pd = input_text
-    #         puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #         dd = input_text
-    #         trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #         confirm_reservation(car_id, pd, dd, trip_d)
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(car_id,pd,dd,trip_d)
-    #             display_reservations
-    #         end
-    #     end
-    # end
-
-
-    # def book_reservation_city_and_carid_first#WORKS
-    #     if self.user.age < 25
-    #         puts "I'm sorry! You're too young to rent a car!"
-    #     else
-    #         city_id = select_city
-    #         çarid = select_car(city_id)
-    #     end
-    #     def book_reservation_dates
-    #         begin
-    #             puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
-    #             pd = input_text
-    #             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
-    #             dd = input_text
-    #             trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-    #             rescue #rescue NameError, ArgumentError #these two need to be tested later
-    #             puts "Invalid entry, please try again!"
-    #             book_reservation_dates
-    #             else
-    #             confirm_reservation(çarid, pd, dd, trip_d)
-    #             end
-    #         response = input_yes_or_no
-    #         if response == 'Y'
-    #             self.user.create_reservation(çarid,pd,dd,trip_d)
-    #             display_reservations
-    #         end
-    #     end
-    #     book_reservation_dates
-    # end
-
-    def book_reservation #WORKS
+  
+    def book_reservation 
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else
@@ -219,12 +162,12 @@ class Cli < ActiveRecord::Base
             dd = input_text
             begin
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
-                    if trip_d < 0 
-                        puts "The drop off date you entered is before your pick up date. Please start again."
-                        return book_reservation
-                    end 
+                if trip_d < 0
+                    puts "Your dropoff date cannot be before your pickup date. Please re-select your dates"
+                    return book_reservation
+                end
             rescue #rescue NameError, ArgumentError #these two need to be tested later
-                puts "Invalid entry, please try again!"
+                invalid_entry_message
                 return book_reservation
             else
                 city_id = select_city.to_i
@@ -271,6 +214,7 @@ class Cli < ActiveRecord::Base
         end
     end
 
+
     def display_reservations
         res = self.user.reservations.reload
         if res.length == 0 
@@ -286,18 +230,27 @@ class Cli < ActiveRecord::Base
         end
     end
 
-
+    #change id to counter
     def cancel_res(future_res)
+    counter = 1 
         future_res.each do |r|
-            puts "~~~RESERVATION ID: #{r.id}~~~~"
+            puts "~~~RESERVATION ID: #{counter}~~~~"
             display_a_reservation(r)
+            counter += 1
         end
         puts "Please enter the Reservation ID for the reservation you would like to cancel."
-        input_text
+        answer = input_text.to_i
+            if answer > future_res.length || answer < 1 
+                invalid_entry_message
+                return cancel_res(future_res)
+            end
+        index = answer-1
+        future_res[index].id
     end
 
-    def are_you_sure
-        msg = "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION?????? Input 'Y' or 'N'"
+    def are_you_sure #all reservations can be cancelled. not only the one belonging to user
+        msg = "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION? Input 'Y' or 'N'"
+        msg2 = "YOU ARE A TERRIBLE PERSON"
         puts ""
             3.times do 
                 print "\r#{'  '*msg.size}"
@@ -305,15 +258,19 @@ class Cli < ActiveRecord::Base
                 print "\r#{ msg.colorize(:red)}"
                 sleep 0.5
             end
-        system `say #{msg}`
+        response = input_yes_or_no
+            if response == "Y" 
+                system `say #{msg2}`
+            end
         puts ""
-        input_yes_or_no
+        response
     end
 
     def final_cancel(r_id)
         Reservation.find_by(id: r_id).destroy
     end 
 
+    #users technically can cancel other reservations
     def cancel_reservations
         #display all user's reservations with future date 
         #display with ID number
@@ -373,7 +330,7 @@ class Cli < ActiveRecord::Base
         end
     end
     
-    #out puts a goodbye message and exits the app 
+    #outputs a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
         # goodbye_car1
@@ -392,7 +349,7 @@ class Cli < ActiveRecord::Base
         elsif input == "Y"
             return input
         else
-            puts "Invalid entry, please try again"
+            invalid_entry_message
             input_yes_or_no
         end
     end
@@ -402,6 +359,10 @@ class Cli < ActiveRecord::Base
         gets.strip
     end
 
+
+    def invalid_entry_message
+        puts "Invalid entry, please try again."
+    end
     
     # def goodbye_car1
     #     print <<-'EOF'
