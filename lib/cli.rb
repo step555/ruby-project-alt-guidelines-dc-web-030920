@@ -40,17 +40,34 @@ class Cli < ActiveRecord::Base
                 puts "I'm sorry, that username already exists"
                 new_user
             else
-                puts "Please enter your age:"
-                i_age = input_text
-                user = User.create(username: username, age: i_age)
-                self.user = user
+                # puts "Please enter your age:"
+                # i_age = input_text
+                # user = User.create(username: username, age: i_age)
+                # self.user = user
+                # main_menu
+                new_user_age
+                # user = User.create(username: username, age: i_age)
+                # self.user = user
                 main_menu
             end
+    end
+
+    def new_user_age
+        puts "Please enter your age:"
+        i_age = input_text.to_i
+        if i_age <= 0
+            invalid_entry_message
+            new_user_age
+        else
+            user = User.create(username: username, age: i_age)
+            self.user = user
+            main_menu
+        end
     end
     
     #allows the user to login, saves that user to the instance of CLI...or continues through new user if user does not exist
     def login
-        puts "Please login with your username:" #password later
+        puts "Please login with your username:"
         input = input_text
         user = User.find_by(username:input)
             if user 
@@ -85,8 +102,8 @@ class Cli < ActiveRecord::Base
         menu_selection = input_text
             if menu_selection == "1"
                 book_reservation
-                # program travels here once loop is finished?
-                return_main_menu
+                # return_main_menu
+                main_menu
             elsif menu_selection == "2"
                 display_reservations
                     return_main_menu
@@ -98,7 +115,7 @@ class Cli < ActiveRecord::Base
             elsif menu_selection == "5"
                 goodbye
             else
-                puts "Invalid entry, please try again."
+                invalid_entry_message
                 main_menu
             end
     end
@@ -203,22 +220,22 @@ class Cli < ActiveRecord::Base
             dd = input_text
             begin
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+                if trip_d < 0
+                    puts "Your trip duration cannot be negative. Please re-select your dates"
+                    return book_reservation
+                end
             rescue #rescue NameError, ArgumentError #these two need to be tested later
-                puts "Invalid entry, please try again!"
+                invalid_entry_message
                 return book_reservation
             else
                 city_id = select_city
                 carid = select_car(city_id)
                 confirm_reservation(carid, pd, dd, trip_d)
-                # binding.pry
                 end
             response = input_yes_or_no
-            # binding.pry
             if response == 'Y'
                 self.user.create_reservation(carid,pd,dd,trip_d)
                 display_reservations
-            # else
-            #     goodbye
             end
         end
     end
@@ -255,7 +272,7 @@ class Cli < ActiveRecord::Base
         end
     end
 
-    # def display_reservations
+    # def display_reservations #why is this here? duplicate method?
     #     res = self.user.reservations.reload
     #     if res.length == 0 
     #         puts "You don't have any reservations at this time."
@@ -294,8 +311,8 @@ class Cli < ActiveRecord::Base
         input_text
     end
 
-    def are_you_sure
-        msg = "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION?????? Input 'Y' or 'N'"
+    def are_you_sure #all reservations can be cancelled. not only the one belonging to user
+        msg = "ARE YOU SURE YOU WANT TO CANCEL YOUR RESERVATION? Input 'Y' or 'N'"
         puts ""
             3.times do 
                 print "\r#{'  '*msg.size}"
@@ -371,7 +388,7 @@ class Cli < ActiveRecord::Base
         end
     end
     
-    #out puts a goodbye message and exits the app 
+    #outputs a goodbye message and exits the app 
     def goodbye
         puts "Goodbye!"
         # goodbye_car
@@ -386,7 +403,7 @@ class Cli < ActiveRecord::Base
         elsif input == "Y"
             return input
         else
-            puts "Invalid entry, please try again"
+            invalid_entry_message
             input_yes_or_no
         end
     end
@@ -400,11 +417,15 @@ class Cli < ActiveRecord::Base
     def car_input
         input = gets.strip.to_i
         if input < 1 || input > Car.all.length
-            puts "Invalid entry, please try again." 
+            invalid_entry_message
             car_input
         else
             return input
         end
+    end
+
+    def invalid_entry_message
+        puts "Invalid entry, please try again."
     end
     
 
