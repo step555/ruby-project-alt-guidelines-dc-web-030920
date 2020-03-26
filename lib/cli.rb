@@ -85,6 +85,7 @@ class Cli < ActiveRecord::Base
         menu_selection = input_text
             if menu_selection == "1"
                 book_reservation
+                # program travels here once loop is finished?
                 return_main_menu
             elsif menu_selection == "2"
                 display_reservations
@@ -204,16 +205,20 @@ class Cli < ActiveRecord::Base
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
             rescue #rescue NameError, ArgumentError #these two need to be tested later
                 puts "Invalid entry, please try again!"
-                book_reservation
+                return book_reservation
             else
                 city_id = select_city
                 carid = select_car(city_id)
                 confirm_reservation(carid, pd, dd, trip_d)
+                # binding.pry
                 end
             response = input_yes_or_no
+            # binding.pry
             if response == 'Y'
                 self.user.create_reservation(carid,pd,dd,trip_d)
                 display_reservations
+            # else
+            #     goodbye
             end
         end
     end
@@ -250,6 +255,21 @@ class Cli < ActiveRecord::Base
         end
     end
 
+    # def display_reservations
+    #     res = self.user.reservations.reload
+    #     if res.length == 0 
+    #         puts "You don't have any reservations at this time."
+    #     else
+    #         count = 1 
+    #         puts ("#{self.user.username.upcase}'S CONFIRMED RESERVATIONS").colorize(:green)
+    #         res.each do |r|
+    #             puts ("~~~~~RESERVATION - #{count}~~~~~").colorize(:green)
+    #             display_a_reservation(r)
+    #             count += 1
+    #         end
+    #     end
+    # end
+
     def display_reservations
         res = self.user.reservations.reload
         if res.length == 0 
@@ -264,7 +284,6 @@ class Cli < ActiveRecord::Base
             end
         end
     end
-
 
     def cancel_res(future_res)
         future_res.each do |r|
