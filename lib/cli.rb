@@ -11,7 +11,7 @@ class Cli < ActiveRecord::Base
     end
 
     def car_sound
-        pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
+        # pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
     end
 
 
@@ -183,9 +183,9 @@ class Cli < ActiveRecord::Base
         city_cars = Car.city_cars(city_id)
         puts "Please enter the number for the car you would like to book. 🚘"
         display_cars(city_cars)
-        input = input_text
-        index = input.to_i - 1 
-            if index < 0 || index > city_cars.length
+        input = input_text.to_i
+        index = input - 1 
+            if input < 1 || input > city_cars.length
                  puts "Invalid entry, please try again." 
                  select_car(city_id)
             else
@@ -196,7 +196,6 @@ class Cli < ActiveRecord::Base
   
   
     def book_reservation 
-        binding.pry
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else   
@@ -207,7 +206,9 @@ class Cli < ActiveRecord::Base
             dd = input_text
             puts "=============================================="
             begin
-                trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
+                dd = dd.to_datetime
+                pd = pd.to_datetime
+                trip_d = (dd- pd).to_f.ceil
                 if trip_d < 0
                     puts "Your dropoff date cannot be before your pickup date. Please re-select your dates"
                     return book_reservation
@@ -514,3 +515,5 @@ class Cli < ActiveRecord::Base
 end
 
 
+# Pickup Date: 245eriwdfsjlm,cv;asldf 1245 1234 134 999 sdaf
+# Dropoff Date: 321eqrwdsaf lsjfbdnm wodfjk 435987 asdflkj cv
