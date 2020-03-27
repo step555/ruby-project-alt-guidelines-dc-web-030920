@@ -5,11 +5,13 @@ class Cli < ActiveRecord::Base
     def welcome
         car_sound
         car_image
-        puts ("WELCOME TO THE SUPER COOL CAR RENTAL APP!!!").colorize(:yellow)
+        puts ("#####################################################").colorize(:yellow)
+        puts ("#### WELCOME TO THE SUPER COOL CAR RENTAL APP!!! ####").colorize(:yellow)
+        puts ("#####################################################").colorize(:yellow)
     end
 
     def car_sound
-        # pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
+        pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
     end
 
 
@@ -109,6 +111,12 @@ class Cli < ActiveRecord::Base
         puts "3. Cancel Reservations"
         puts "4. Make Payment"
         puts "5. Quit"
+#         puts "Welcome #{self.user.username}. What would you like to do today?"
+#         puts ("1. Book a new reservation
+# 2. Review Reservations
+# 3. Cancel Reservations
+# 4. Make Payment
+# 5. Quit").colorize(:green)
     end
 
     #user views the mainmenu and makes a selection 
@@ -147,7 +155,6 @@ class Cli < ActiveRecord::Base
     end
     
     def select_city 
-        city_scape
         puts "Where would you like to rent your car?"
         cities = City.all
         cities.each do |c|
@@ -157,8 +164,8 @@ class Cli < ActiveRecord::Base
         if select > 0 && select <= cities.length
             return select
         else 
-            # city_scape
             invalid_entry_message
+            puts "\n"
             return select_city
         end
     end 
@@ -174,7 +181,7 @@ class Cli < ActiveRecord::Base
 
     def select_car(city_id)
         city_cars = Car.city_cars(city_id)
-        puts "Please enter the number for the car you would like to book."
+        puts "Please enter the number for the car you would like to book. 🚘"
         display_cars(city_cars)
         input = input_text
         index = input.to_i - 1 
@@ -208,6 +215,7 @@ class Cli < ActiveRecord::Base
                 invalid_entry_message
                 return book_reservation
             else
+                city_scape
                 city_id = select_city.to_i
                 car_id = select_car(city_id)
                 confirm_reservation(city_id, car_id, pd, dd, trip_d)
@@ -282,7 +290,7 @@ class Cli < ActiveRecord::Base
     def cancel_res(future_res)
     counter = 1 
         future_res.each do |r|
-            puts "~~~RESERVATION ID: #{counter}~~~~"
+            puts ("~~~RESERVATION ID: #{counter}~~~~").colorize(:red)
             display_a_reservation(r)
             counter += 1
         end
@@ -308,6 +316,8 @@ class Cli < ActiveRecord::Base
             end
         response = input_yes_or_no
             if response == "Y" 
+                puts "\n"
+                puts "🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔🚔"
                 system `say #{msg2}`
             end
         puts ""
@@ -348,13 +358,13 @@ class Cli < ActiveRecord::Base
 
 
     def display_unpaid(unpaid)
-        puts "#{self.user.username.upcase} UNPAID RESERVATIONS"
+        puts ("#{self.user.username.upcase}'s UNPAID RESERVATIONS").colorize(:red)
         count = 1 
         total = 0 
             unpaid.each do |r|
                 car = Car.find_by(id:r.car_id)
                 total += (car.price_per_day*r.trip_duration.to_f).round(2)
-                puts "~~~~ RESERVATION #{count} ~~~~"
+                puts ("~~~~ RESERVATION #{count} ~~~~").colorize(:red)
                     display_a_reservation(r)
                 count += 1 
             end
@@ -363,6 +373,7 @@ class Cli < ActiveRecord::Base
             if answer == "Y" 
                 self.user.change_all_reservations_to_paid
                 puts "Payment confirmed! Thank you for your business!"
+                puts "\n"
             else 
                 puts  "Please pay us sometime soon!"
             end
@@ -387,6 +398,7 @@ class Cli < ActiveRecord::Base
         goodbye_car2
         goodbye_car3
         goodbye_car4
+        bye
         exit
     end
     
@@ -479,6 +491,23 @@ class Cli < ActiveRecord::Base
                                                                         `-'      `-'
     EOF
     sleep 0.5
+    system 'clear'
+    end
+
+    def bye
+    print <<-'EOF'
+    88                                  
+    88                                  
+    88                                  
+    88,dPPYba,  8b       d8  ,adPPYba,  
+    88P'    "8a `8b     d8' a8P_____88  
+    88       d8  `8b   d8'  8PP"""""""  
+    88b,   ,a8"   `8b,d8'   "8b,   ,aa  
+    8Y"Ybbd8"'      Y88'     `"Ybbd8"'  
+                    d8'                 
+                   d8'    
+
+    EOF
     end
 
 end
