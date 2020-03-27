@@ -3,9 +3,13 @@ class Cli < ActiveRecord::Base
     
     #displays a welcome message 
     def welcome
+        car_sound
         car_image
-        # car_sound
-        puts "WELCOME TO THE SUPER COOL CAR RENTAL APP!!! "
+        puts ("WELCOME TO THE SUPER COOL CAR RENTAL APP!!!").colorize(:yellow)
+    end
+
+    def car_sound
+        # pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
     end
 
 
@@ -142,7 +146,7 @@ class Cli < ActiveRecord::Base
         display_cars(city_cars)
         input = input_text
         index = input.to_i - 1 
-            if index < 1 || index > city_cars.length
+            if index < 0 || index > city_cars.length
                  puts "Invalid entry, please try again." 
                  select_car(city_id)
             else
@@ -155,7 +159,7 @@ class Cli < ActiveRecord::Base
     def book_reservation 
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
-        else
+        else   
             puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
             pd = input_text
             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
@@ -172,10 +176,12 @@ class Cli < ActiveRecord::Base
             else
                 city_id = select_city.to_i
                 car_id = select_car(city_id)
-                confirm_reservation(car_id, pd, dd, trip_d)
+                confirm_reservation(city_id, car_id, pd, dd, trip_d)
                 end
             response = input_yes_or_no
             if response == 'Y'
+                # self.user.create_reservation(car_id,pd,dd,trip_d)
+                # binding.pry
                 self.user.create_reservation(car_id,pd,dd,trip_d)
                 display_reservations
             end
@@ -183,11 +189,14 @@ class Cli < ActiveRecord::Base
     end
     
 
-    def confirm_reservation(carid, pd, dd, trip_d)
-        car = Car.find_by(id:carid)
+    # def confirm_reservation(car_id, pd, dd, trip_d)
+    def confirm_reservation(city_id, car_id, pd, dd, trip_d)
+        car = Car.find_by(id:car_id)
+        city = City.find_by(id:city_id)
         total_price = (trip_d*car.price_per_day).round(2)
         puts "Please review your reservation"
         puts "Customer: #{self.user.username}"
+        puts "City: #{city.name}"
         puts "Car: #{car.make} #{car.model} #{car.year}...or similar"
         puts "Pickup Date: #{pd}"
         puts "Dropoff Date: #{dd}"
@@ -199,6 +208,8 @@ class Cli < ActiveRecord::Base
 
     def display_a_reservation(r)  
         car = Car.find_by(id: r.car_id)
+        city = City.find_by(id: car.city_id)
+        puts "City: #{city.name}"
         puts "Pickup Date: #{r.pickup_date}"        
         puts "Dropoff date: #{r.dropoff_date}"
         puts "Trip duration: #{r.trip_duration}"
@@ -230,7 +241,6 @@ class Cli < ActiveRecord::Base
         end
     end
 
-    #change id to counter
     def cancel_res(future_res)
     counter = 1 
         future_res.each do |r|
@@ -332,12 +342,13 @@ class Cli < ActiveRecord::Base
     
     #outputs a goodbye message and exits the app 
     def goodbye
+        blank_space
         puts "Goodbye!"
-        # goodbye_car1
-        # sleep 0.5
-        # goodbye_car2
-        # sleep 0.5
-        # goodbye_car3
+        car_sound
+        goodbye_car1
+        goodbye_car2
+        goodbye_car3
+        goodbye_car4
         exit
     end
     
@@ -364,35 +375,73 @@ class Cli < ActiveRecord::Base
         puts "Invalid entry, please try again."
     end
     
-    # def goodbye_car1
-    #     print <<-'EOF'
-    #         ___
-    #         _-_-  _/\______\\__
-    #     _-_-__  / ,-. -|-  ,-.`-.
-    #         _-_- `( o )----( o )-'
-    #             `-'      `-'
-    # EOF
-    # end
+    def blank_space
+        print <<-'EOF'
+       
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      
+    EOF
+
+    end
+    def goodbye_car1
+        system 'clear'
+        print <<-'EOF'
+            ___
+            _-_-  _/\______\\__
+        _-_-__  / ,-. -|-  ,-.`-.
+            _-_- `( o )----( o )-'
+                `-'      `-'
+    EOF
+    sleep 0.5
+    system 'clear'
+    end
     
-    # def goodbye_car2
-    # print <<-'EOF'
-    #                         ___
-    #                         _-_-  _/\______\\__
-    #                     _-_-__  / ,-. -|-  ,-.`-.
-    #                         _-_- `( o )----( o )-'
-    #                             `-'      `-'
-    # EOF
-    # end
+    def goodbye_car2
+    print <<-'EOF'
+                            ___
+                            _-_-  _/\______\\__
+                        _-_-__  / ,-. -|-  ,-.`-.
+                            _-_- `( o )----( o )-'
+                                `-'      `-'
+    EOF
+    sleep 0.5
+    system 'clear'
+    end
  
-    # def goodbye_car3
-    #     print <<-'EOF'
-    #                                                 ___
-    #                                                 _-_-  _/\______\\__
-    #                                             _-_-__  / ,-. -|-  ,-.`-.
-    #                                                 _-_- `( o )----( o )-'
-    #                                                     `-'      `-'
-    # EOF
-    # end
+    def goodbye_car3
+    print <<-'EOF'
+                                                ___
+                                                _-_-  _/\______\\__
+                                            _-_-__  / ,-. -|-  ,-.`-.
+                                                _-_- `( o )----( o )-'
+                                                    `-'      `-'
+    EOF
+    sleep 0.5
+    system 'clear'
+    end
+
+    def goodbye_car4
+    print <<-'EOF'
+                                                                    ___
+                                                                    _-_-  _/\______\\__
+                                                                _-_-__  / ,-. -|-  ,-.`-.
+                                                                    _-_- `( o )----( o )-'
+                                                                        `-'      `-'
+    EOF
+    sleep 0.5
+    end
 
 end
 
