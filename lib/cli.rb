@@ -32,6 +32,29 @@ class Cli < ActiveRecord::Base
         EOF
     end
 
+    def city_scape
+    puts <<-'EOF'
+
+
+
+
+            __   __                     ___      _
+            |  | |  |      /|           |   |   _/ \_
+            |  | |  |  _  | |__         |   |_-/     \-_     _
+        __|  | |  |_| | | |  |/\_     |   |  \     /  |___|
+        |  |  | |  | | __| |  |   |_   |   |   |___|   |   |
+        |  |  |^|  | ||  | |  |   | |__|   |   |   |   |   |
+        |  |  |||  | ||  | |  |   | /\ |   |   |   |   |   |
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~/  \~~~~~~~~~~~~~~~~~~~~~~~
+        ~ ~~  ~ ~~ ~~~ ~ ~ ~~ ~~ ~~ \   \__   ~  ~  ~~~~ ~~~ ~~
+    ~~ ~ ~ ~~~ ~~  ~~ ~~~~~~~~~~ ~ \   \o\  ~~ ~ ~~~~ ~ ~ ~~~
+        ~ ~~~~~~~~ ~ ~ ~~ ~ ~ ~ ~ ~~~ \   \o\=   ~~ ~~  ~~ ~ ~~
+    ~ ~ ~ ~~~~~~~ ~  ~~ ~~ ~ ~~ ~ ~ ~~ ~ ~ ~~ ~~~ ~ ~ ~ ~ ~~~~
+    EOF
+    end
+
+
+
     #creates a new user and saves that user to the cli instance 
     def new_user
         puts "Please enter a username:"
@@ -124,11 +147,20 @@ class Cli < ActiveRecord::Base
     end
     
     def select_city 
+        city_scape
         puts "Where would you like to rent your car?"
-        City.all.each do |c|
+        cities = City.all
+        cities.each do |c|
             puts "#{c.id}. #{c.name}"
         end
-        input_text
+        select = input_text.to_i
+        if select > 0 && select <= cities.length
+            return select
+        else 
+            # city_scape
+            invalid_entry_message
+            return select_city
+        end
     end 
 
     def display_cars(array)
@@ -160,10 +192,12 @@ class Cli < ActiveRecord::Base
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else   
+            puts "=============================================="
             puts "Select your pickup date YYYY-MM-DD HH:MM:00" #1-1-1 is valid here. should not be valid...
             pd = input_text
             puts "Select your dropoff date YYYY-MM-DD HH:MM:00"
             dd = input_text
+            puts "=============================================="
             begin
                 trip_d = (dd.to_datetime - pd.to_datetime).to_f.ceil
                 if trip_d < 0
@@ -194,6 +228,7 @@ class Cli < ActiveRecord::Base
         car = Car.find_by(id:car_id)
         city = City.find_by(id:city_id)
         total_price = (trip_d*car.price_per_day).round(2)
+        puts "=============================================="
         puts "Please review your reservation"
         puts "Customer: #{self.user.username}"
         puts "City: #{city.name}"
@@ -203,12 +238,14 @@ class Cli < ActiveRecord::Base
         puts "Trip Duration: #{trip_d} days"
         puts "Price per day: $#{car.price_per_day}"
         puts "Total Price: $#{total_price}"
+        puts "=============================================="
         puts "To confirm your reservation enter Y, To cancel enter N."
     end
 
     def display_a_reservation(r)  
         car = Car.find_by(id: r.car_id)
         city = City.find_by(id: car.city_id)
+        puts "=============================================="
         puts "City: #{city.name}"
         puts "Pickup Date: #{r.pickup_date}"        
         puts "Dropoff date: #{r.dropoff_date}"
@@ -223,6 +260,7 @@ class Cli < ActiveRecord::Base
         else
             puts "You owe #{total_price}"
         end
+        puts "=============================================="
     end
 
 
