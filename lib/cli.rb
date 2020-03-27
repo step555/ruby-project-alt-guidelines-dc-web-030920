@@ -11,7 +11,7 @@ class Cli < ActiveRecord::Base
     end
 
     def car_sound
-        # pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
+        pid = fork{exec 'afplay', "lib/BMW+DRIVEBY.mp3"}
     end
 
 
