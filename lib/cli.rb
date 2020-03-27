@@ -76,7 +76,7 @@ class Cli < ActiveRecord::Base
     def new_user_age
         puts "Please enter your age:"
         i_age = input_text.to_i
-        if i_age <= 0
+        if i_age <= 0 || i_age > 100
             invalid_entry_message
             new_user_age
         end
@@ -196,6 +196,7 @@ class Cli < ActiveRecord::Base
   
   
     def book_reservation 
+        binding.pry
         if self.user.age < 25
             puts "I'm sorry! You're too young to rent a car!"
         else   
